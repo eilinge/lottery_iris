@@ -14,9 +14,6 @@ import (
 	"strings"
 )
 
-// 奖品信息，可以缓存(本地或者redis)，有更新的时候，再根据具体情况更新缓存
-var cachedGiftList = make([]models.LtGift, 0)
-
 type GiftService interface {
 	GetAll(useCache bool) []models.LtGift
 	CountAll() int64

@@ -3,44 +3,46 @@ package controllers
 import (
 	"imooc.com/lottery/models"
 	"imooc.com/lottery/comm"
+	"imooc.com/lottery/services"
 )
 
-// 中了实物大奖，需要把用户、IP暂时放入到黑名单一段时间，人品暂时用光了
-func (c *IndexController) prizeLarge(ip string,
-	loginuser *models.ObjLoginuser,
-	userInfo *models.LtUser,
+func (api *LuckyApi) prizeLarge(ip string,
+	uid int, username string,
+	userinfo *models.LtUser,
 	blackipInfo *models.LtBlackip) {
+	userService := services.NewUserService()
+	blackipService := services.NewBlackipService()
 	nowTime := comm.NowUnix()
 	blackTime := 30 * 86400
 	// 更新用户的黑名单信息
-	if userInfo == nil || userInfo.Id <= 0 {
-		userInfo = &models.LtUser{
-			Id:         loginuser.Uid,
-			Username:   loginuser.Username,
-			Blacktime:  nowTime + blackTime,
+	if userinfo == nil || userinfo.Id <= 0 {
+		userinfo = &models.LtUser{
+			Id:			uid,
+			Username:   username,
+			Blacktime:  nowTime+blackTime,
 			SysCreated: nowTime,
 			SysIp:      ip,
 		}
-		c.ServiceUser.Create(userInfo)
+		userService.Create(userinfo)
 	} else {
-		userInfo = &models.LtUser{
-			Id:loginuser.Uid,
-			Blacktime:nowTime + blackTime,
+		userinfo = &models.LtUser{
+			Id: uid,
+			Blacktime:nowTime+blackTime,
 			SysUpdated:nowTime,
 		}
-		c.ServiceUser.Update(userInfo, nil)
+		userService.Update(userinfo, nil)
 	}
-	// 更新IP的黑名单信息
+	// 更新要IP的黑名单信息
 	if blackipInfo == nil || blackipInfo.Id <= 0 {
 		blackipInfo = &models.LtBlackip{
 			Ip:         ip,
-			Blacktime:  nowTime + blackTime,
+			Blacktime:  nowTime+blackTime,
 			SysCreated: nowTime,
 		}
-		c.ServiceBlackip.Create(blackipInfo)
+		blackipService.Create(blackipInfo)
 	} else {
 		blackipInfo.Blacktime = nowTime + blackTime
 		blackipInfo.SysUpdated = nowTime
-		c.ServiceBlackip.Update(blackipInfo, nil)
+		blackipService.Update(blackipInfo, nil)
 	}
 }

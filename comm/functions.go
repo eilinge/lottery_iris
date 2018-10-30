@@ -13,6 +13,7 @@ import (
 	"imooc.com/lottery/conf"
 	"strconv"
 	"strings"
+	"crypto/md5"
 )
 
 // 当前时间的时间戳
@@ -51,6 +52,13 @@ func Random(max int) int {
 	} else {
 		return r.Intn(max)
 	}
+}
+
+// 对字符串进行签名
+func CreateSign(str string) string {
+	str = string(conf.SignSecret) + str
+	sign := fmt.Sprintf("%x", md5.Sum([]byte(str)))
+	return sign
 }
 
 // 对一个字符串进行加密

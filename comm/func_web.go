@@ -1,8 +1,7 @@
 package comm
 
 import (
-	"crypto/md5"
-	"fmt"
+		"fmt"
 	"log"
 		"net/http"
 	"net/url"
@@ -101,6 +100,5 @@ func SetLoginuser(writer http.ResponseWriter, loginuser *models.ObjLoginuser) {
 // 根据登录用户信息生成加密字符串
 func createLoginuserSign(loginuser *models.ObjLoginuser) string {
 	str := fmt.Sprintf("uid=%d&username=%s&secret=%s", loginuser.Uid, loginuser.Username, conf.CookieSecret)
-	sign := fmt.Sprintf("%x", md5.Sum([]byte(str)))
-	return sign
+	return CreateSign(str)
 }

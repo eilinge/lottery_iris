@@ -6,12 +6,12 @@ import (
 	"log"
 	"time"
 
-	"github.com/gomodule/redigo/redis"
 	"imooc.com/lottery/comm"
 	"imooc.com/lottery/conf"
 	"imooc.com/lottery/datasource"
 	"imooc.com/lottery/models"
 	"imooc.com/lottery/services"
+	"github.com/gomodule/redigo/redis"
 )
 
 func init() {
@@ -61,7 +61,7 @@ func ResetGiftPrizeData(giftInfo *models.LtGift, giftService services.GiftServic
 	// 每天可以分配到的奖品数量
 	dayPrizeNum := make(map[int]int)
 	// 平均分配，每天分到的奖品数量做分布
-	if avgNum >= 1 {
+	if avgNum >= 1 && dayNum > 0 {
 		for day := 0; day < dayNum; day++ {
 			dayPrizeNum[day] = avgNum
 		}
@@ -301,7 +301,6 @@ func getGiftPrizeDataOneDay(num int) map[int][60]int {
 	hourData := [24]int{}
 	// 分别将奖品分布到24个小时内
 	if num > 100 {
-		hourNum := 0
 		// 奖品数量多的时候，直接按照百分比计算出来
 		for _, h := range conf.PrizeDataRandomDayTime {
 			hourData[h]++
@@ -310,9 +309,8 @@ func getGiftPrizeDataOneDay(num int) map[int][60]int {
 			d := hourData[h]
 			n := num * d / 100
 			hourData[h] = n
-			hourNum += n
+			num -= n
 		}
-		num -= hourNum
 	}
 	// 奖品数量少的时候，或者剩下了一些没有分配，需要用到随即概率来计算
 	for num > 0 {

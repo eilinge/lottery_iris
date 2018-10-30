@@ -26,6 +26,8 @@ func main() {
 		conf.RunningCrontabService = true
 	}
 
+	// TODO: 定义thrift方案，以及处理前端大转盘页面
+
 	app := newApp()
 	app.Listen(fmt.Sprintf(":%d", port))
 }

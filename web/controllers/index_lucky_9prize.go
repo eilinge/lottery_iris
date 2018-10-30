@@ -3,13 +3,12 @@ package controllers
 import (
 	"imooc.com/lottery/models"
 	"imooc.com/lottery/conf"
-	"log"
-)
+	)
 
 func (c *IndexController) prize(prizeCode int, limitBlack bool) *models.ObjGiftPrize {
 	var prizeGift *models.ObjGiftPrize
 	giftList := c.ServiceGift.GetAllUse(true)
-	log.Println(prizeCode, limitBlack, giftList)
+
 	for _, gift := range giftList {
 		if gift.PrizeCodeA <= prizeCode && gift.PrizeCodeB >= prizeCode {
 			// 中奖编码满足条件，说明可以中奖

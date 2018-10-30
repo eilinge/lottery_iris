@@ -31,7 +31,6 @@ func resetAllGiftPrizeData() {
 			// 立即执行
 			log.Println("crontab start utils.ResetGiftPrizeData giftInfo=", giftInfo)
 			utils.ResetGiftPrizeData(&giftInfo, giftService)
-
 			// 预加载缓存数据
 			giftService.GetAll(true)
 			log.Println("crontab end utils.ResetGiftPrizeData giftInfo")

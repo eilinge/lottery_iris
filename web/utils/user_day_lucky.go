@@ -13,7 +13,7 @@ import (
 	"imooc.com/lottery/datasource"
 )
 
-const userFrameSize = 2
+const userFrameSize = 1024
 
 func init() {
 	// User当天的统计数，整点归零，设置定时器
@@ -26,13 +26,11 @@ func init() {
 
 // 集群模式，重置用户今天次数
 func resetGroupUserList() {
-	log.Println("user_day_lucky.resetGroupUserList start")
 	cacheObj := datasource.InstanceCache()
 	for i := 0; i < userFrameSize; i++ {
 		key := fmt.Sprintf("day_users_%d", i)
 		cacheObj.Do("DEL", key)
 	}
-	log.Println("user_day_lucky.resetGroupUserList stop")
 	// IP当天的统计数，整点归零，设置定时器
 	duration := comm.NextDayDuration()
 	time.AfterFunc(duration, resetGroupUserList)

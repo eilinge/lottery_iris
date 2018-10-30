@@ -89,6 +89,18 @@ func (c *IndexController) GetMyprize() map[string]interface{} {
 	return rs
 }
 
+// 我的中奖记录 localhost:8080/myprize
+func (c *IndexController) GetMyprize() map[string]interface{} {
+	rs := make(map[string]interface{})
+	rs["code"] = 0
+	rs["msg"] = ""
+	loginUser := comm.GetLoginUser(c.Ctx.Request())
+	list := c.ServiceResult.SearchByUser(loginUser.Uid, 1, 100)
+
+	rs["prize_list"] = list
+	return rs
+}
+
 // 登录 GET /login
 func (c *IndexController) GetLogin() {
 	// 每次随机生成一个登录用户信息

@@ -2,13 +2,13 @@ package controllers
 
 import (
 	"fmt"
-	"strings"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
-
 	"imooc.com/lottery/comm"
 	"imooc.com/lottery/models"
 	"imooc.com/lottery/services"
+	"imooc.com/lottery/web/utils"
+		"strings"
 	"imooc.com/lottery/conf"
 )
 
@@ -34,6 +34,7 @@ func (c *AdminCodeController) Get() mvc.Result {
 	var cacheNum int
 	if giftId > 0 {
 		datalist = c.ServiceCode.Search(giftId)
+		num, cacheNum = utils.GetCacheCodeNum(giftId, c.ServiceCode)
 	} else {
 		datalist = c.ServiceCode.GetAll(page, size)
 	}
@@ -74,7 +75,7 @@ func (c *AdminCodeController) PostImport() {
 		c.Ctx.Text("没有指定奖品ID，无法进行导入，<a href='' onclick='history.go(-1);return false;'>返回</a>")
 		return
 	}
-	gift := c.ServiceGift.Get(giftId)
+	gift := c.ServiceGift.Get(giftId, true)
 	if gift == nil || gift.Gtype != conf.GtypeCodeDiff {
 		c.Ctx.HTML("没有指定的优惠券类型的奖品，无法进行导入，<a href='' onclick='history.go(-1);return false;'>返回</a>")
 		return
@@ -97,6 +98,12 @@ func (c *AdminCodeController) PostImport() {
 				errNum++
 			} else {
 				// 成功导入数据库，还需要导入到缓存中
+				ok := utils.ImportCacheCodes(giftId, code)
+				if ok {
+					sucNum++
+				} else {
+					errNum++
+				}
 			}
 		}
 	}
@@ -129,4 +136,22 @@ func (c *AdminCodeController) GetReset() mvc.Result {
 	return mvc.Response{
 		Path: refer,
 	}
+}
+
+// 重新整理优惠券的数据，如果是本地服务，也需要启动时加载
+func (c *AdminCodeController) GetRecache() {
+	refer := c.Ctx.GetHeader("Referer")
+	if refer == "" {
+		refer = "/admin/code"
+	}
+	id, err := c.Ctx.URLParamInt("id")
+	if id < 1 || err != nil {
+		rs := fmt.Sprintf("没有指定优惠券所属的奖品id, <a href='%s'>返回</a>", refer)
+		c.Ctx.HTML(rs)
+		return
+	}
+	sucNum, errNum := utils.RecacheCodes(id, c.ServiceCode)
+
+	rs := fmt.Sprintf("sucNum=%d, errNum=%d, <a href='%s'>返回</a>", sucNum, errNum, refer)
+	c.Ctx.HTML(rs)
 }

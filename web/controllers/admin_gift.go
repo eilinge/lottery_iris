@@ -10,6 +10,7 @@ import (
 	"imooc.com/lottery/services"
 	"imooc.com/lottery/web/viewmodels"
 	"fmt"
+	"imooc.com/lottery/web/utils"
 	"encoding/json"
 	)
 
@@ -25,7 +26,7 @@ type AdminGiftController struct {
 
 func (c *AdminGiftController) Get() mvc.Result {
 	// 数据列表
-	datalist := c.ServiceGift.GetAll()
+	datalist := c.ServiceGift.GetAll(false)
 	for i, giftInfo := range datalist {
 		// 奖品发放的计划数据
 		prizedata := make([][2]int, 0)
@@ -45,6 +46,9 @@ func (c *AdminGiftController) Get() mvc.Result {
 				datalist[i].PrizeData = "[]"
 			}
 		}
+		// 奖品当前的奖品池数量
+		num := utils.GetGiftPoolNum(giftInfo.Id)
+		datalist[i].Title = fmt.Sprintf("【%d】%s", num, datalist[i].Title)
 	}
 	total := len(datalist)
 	return mvc.View{
@@ -63,7 +67,7 @@ func (c *AdminGiftController) GetEdit() mvc.Result {
 	id := c.Ctx.URLParamIntDefault("id", 0)
 	giftInfo := viewmodels.ViewGift{}
 	if id > 0 {
-		data := c.ServiceGift.Get(id)
+		data := c.ServiceGift.Get(id, false)
 		if data != nil {
 			giftInfo.Id = data.Id
 			giftInfo.Title = data.Title
@@ -119,7 +123,7 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 	giftInfo.TimeBegin = int(t1.Unix())
 	giftInfo.TimeEnd = int(t2.Unix())
 	if giftInfo.Id > 0 {
-		datainfo := c.ServiceGift.Get(giftInfo.Id)
+		datainfo := c.ServiceGift.Get(giftInfo.Id, false)
 		if datainfo != nil {
 			giftInfo.SysUpdated = int(time.Now().Unix())
 			giftInfo.SysIp = comm.ClientIP(c.Ctx.Request())
@@ -135,7 +139,6 @@ func (c *AdminGiftController) PostSave() mvc.Result {
                 giftInfo.LeftNum = giftInfo.PrizeNum
             }
             if datainfo.PrizeTime != giftInfo.PrizeTime {
-				// 发奖周期发生了变化
 			}
 			c.ServiceGift.Update(&giftInfo, []string{"title", "prize_num", "left_num", "prize_code", "prize_time",
 				"img", "displayorder", "gtype", "gdata", "time_begin", "time_end", "sys_updated"})

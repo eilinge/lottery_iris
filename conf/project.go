@@ -2,7 +2,6 @@ package conf
 
 import "time"
 
-const RunningServiceGroup = false // 是否运行在集群模式
 const UserPrizeMax = 3000            // 用户每天最多抽奖次数
 const IpPrizeMax = 30000             // 同一个IP每天最多抽奖次数
 const IpLimitMax = 300000            // 同一个IP每天最多抽奖次数

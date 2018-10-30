@@ -5,20 +5,20 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/kataras/iris"
-			"fmt"
 
-	"imooc.com/lottery/services"
-	"imooc.com/lottery/models"
 	"imooc.com/lottery/comm"
-	)
+	"imooc.com/lottery/models"
+	"imooc.com/lottery/services"
+)
 
 type IndexController struct {
-	Ctx iris.Context
-	ServiceUser services.UserService
-	ServiceGift services.GiftService
-	ServiceCode services.CodeService
-	ServiceResult services.ResultService
+	Ctx            iris.Context
+	ServiceUser    services.UserService
+	ServiceGift    services.GiftService
+	ServiceCode    services.CodeService
+	ServiceResult  services.ResultService
 	ServiceUserday services.UserdayService
 	ServiceBlackip services.BlackipService
 }

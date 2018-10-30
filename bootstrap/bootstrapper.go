@@ -59,6 +59,26 @@ func (b *Bootstrapper) SetupViews(viewsDir string) {
 	b.RegisterView(htmlEngine)
 }
 
+// SetupSessions initializes the sessions, optionally.
+func (b *Bootstrapper) SetupSessions(expires time.Duration, cookieHashKey, cookieBlockKey []byte) {
+	b.Sessions = sessions.New(sessions.Config{
+		Cookie:   "SECRET_SESS_COOKIE_" + b.AppName,
+		Expires:  expires,
+		Encoding: securecookie.New(cookieHashKey, cookieBlockKey),
+	})
+}
+
+//// SetupWebsockets prepares the websocket server.
+//func (b *Bootstrapper) SetupWebsockets(endpoint string, onConnection websocket.ConnectionFunc) {
+//	ws := websocket.New(websocket.Config{})
+//	ws.OnConnection(onConnection)
+//
+//	b.Get(endpoint, ws.Handler())
+//	b.Any("/iris-ws.js", func(ctx iris.Context) {
+//		ctx.Write(websocket.ClientSource)
+//	})
+//}
+
 // SetupErrorHandlers prepares the http error handlers
 // `(context.StatusCodeNotSuccessful`,  which defaults to < 200 || >= 400 but you can change it).
 func (b *Bootstrapper) SetupErrorHandlers() {
@@ -103,6 +123,10 @@ const (
 // Returns itself.
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.SetupViews("./views")
+	b.SetupSessions(24*time.Hour,
+		[]byte("the-big-and-secret-fash-key-here"),
+		[]byte("lot-secret-of-characters-big-too"),
+	)
 	b.SetupErrorHandlers()
 
 	// static files

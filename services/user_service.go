@@ -43,6 +43,9 @@ func (s *userService) CountAll() int {
 
 func (s *userService) Get(id int) *models.LtUser {
 	data := s.dao.Get(id)
+	if data == nil || data.Id <= 0 {
+		data = &models.LtUser{Id: id}
+	}
 	return data
 }
 

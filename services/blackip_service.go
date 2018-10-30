@@ -61,5 +61,8 @@ func (s *blackipService) Create(data *models.LtBlackip) error {
 // 根据IP读取IP的黑名单数据
 func (s *blackipService) GetByIp(ip string) *models.LtBlackip {
 	data := s.dao.GetByIp(ip)
+	if data == nil || data.Ip == "" {
+		data = &models.LtBlackip{Ip: ip}
+	}
 	return data
 }

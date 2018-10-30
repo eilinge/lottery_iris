@@ -131,7 +131,10 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 					giftInfo.LeftNum = 0
 				}
 				giftInfo.SysStatus = datainfo.SysStatus
-			} else if datainfo.PrizeTime != giftInfo.PrizeTime {
+			} else {
+                giftInfo.LeftNum = giftInfo.PrizeNum
+            }
+            if datainfo.PrizeTime != giftInfo.PrizeTime {
 				// 发奖周期发生了变化
 			}
 			c.ServiceGift.Update(&giftInfo, []string{"title", "prize_num", "left_num", "prize_code", "prize_time",

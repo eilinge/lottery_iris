@@ -10,7 +10,7 @@ import (
 	"github.com/kataras/iris/sessions"
 
 	"imooc.com/lottery/conf"
-	)
+)
 
 type Configurator func(*Bootstrapper)
 

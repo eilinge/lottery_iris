@@ -1,7 +1,8 @@
 <div class="panel-heading">
 {{if gt .GiftId 0}}
     <a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" style="height:18px; padding:6px;">导入奖品({{.GiftId}})的优惠券</a>
-
+    <a href="/admin/code/recache?id={{.GiftId}}" title="(有效编码数/缓存编码数)">
+        重整缓存中券的编码({{.CodeNum}}/{{.CacheNum}})</a>
 {{end}}
     (总共 {{.Total}} 条记录)
 {{if ne .PagePrev ""}}<a href="/admin/code?gift_id={{.GiftId}}&page={{.PagePrev}}">上一页</a>{{end}}

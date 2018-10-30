@@ -18,6 +18,7 @@ type CodeService interface {
 	Delete(id int) error
 	Update(user *models.LtCode, columns []string) error
 	Create(user *models.LtCode) error
+	NextUsingCode(giftId, codeId int) *models.LtCode
 	UpdateByCode(data *models.LtCode, columns []string) error
 }
 
@@ -61,6 +62,10 @@ func (s *codeService) Update(data *models.LtCode, columns []string) error {
 
 func (s *codeService) Create(data *models.LtCode) error {
 	return s.dao.Create(data)
+}
+
+func (s *codeService) NextUsingCode(giftId, codeId int) *models.LtCode {
+	return s.dao.NextUsingCode(giftId, codeId)
 }
 
 func (s *codeService) UpdateByCode(data *models.LtCode, columns []string) error {

@@ -94,6 +94,21 @@ func (d *CodeDao) Create(data *models.LtCode) error {
 	return err
 }
 
+// 找到下一个可用的最小的优惠券
+func (d *CodeDao) NextUsingCode(giftId, codeId int) *models.LtCode {
+	datalist := make([]models.LtCode, 0)
+	err := d.engine.Where("gift_id=?", giftId).
+		Where("sys_status=?", 0).
+		Where("id>?", codeId).
+		Asc("id").Limit(1).
+		Find(&datalist)
+	if err != nil || len(datalist) < 1 {
+		return nil
+	} else {
+		return &datalist[0]
+	}
+}
+
 // 根据唯一的code来更新
 func (d *CodeDao) UpdateByCode(data *models.LtCode, columns []string) error {
 	_, err := d.engine.Where("code=?", data.Code).

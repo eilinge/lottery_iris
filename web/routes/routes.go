@@ -46,5 +46,4 @@ func Configure(b *bootstrap.Bootstrapper) {
 	adminBlackip := admin.Party("/blackip")
 	adminBlackip.Register(blackipService)
 	adminBlackip.Handle(new(controllers.AdminBlackipController))
-
 }

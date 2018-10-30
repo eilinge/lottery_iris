@@ -7,11 +7,16 @@ import (
 	"imooc.com/lottery/dao"
 	"imooc.com/lottery/datasource"
 	"imooc.com/lottery/models"
-		"imooc.com/lottery/comm"
+	"sync"
+	"imooc.com/lottery/comm"
 		"fmt"
 	"log"
 	"github.com/gomodule/redigo/redis"
 )
+
+// IP信息，可以缓存(本地或者redis)，有更新的时候，再根据具体情况更新缓存
+var cachedBlackipList = make(map[string]*models.LtBlackip)
+var cachedBlackipLock = sync.Mutex{}
 
 type BlackipService interface {
 	GetAll(page, size int) []models.LtBlackip

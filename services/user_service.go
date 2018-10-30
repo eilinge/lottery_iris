@@ -11,7 +11,12 @@ import (
 	"imooc.com/lottery/datasource"
 	"imooc.com/lottery/models"
 	"log"
-	)
+	"sync"
+)
+
+// 用户信息，可以缓存(本地或者redis)，有更新的时候，可以直接清除缓存或者根据具体情况更新缓存
+var cachedUserList = make(map[int]*models.LtUser)
+var cachedUserLock = sync.Mutex{}
 
 type UserService interface {
 	GetAll(page, size int) []models.LtUser
@@ -110,17 +115,17 @@ func (s *userService) setByCache(data *models.LtUser) {
 	key := fmt.Sprintf("info_user_%d", id)
 	rds := datasource.InstanceCache()
 	// 数据更新到redis缓存
-	params := redis.Args{key}
-	params = params.Add("Id", id)
+	params := []interface{}{key}
+	params = append(params, "Id", id)
 	if data.Username != "" {
-		params = params.Add(params, "Username", data.Username)
-		params = params.Add(params, "Blacktime", data.Blacktime)
-		params = params.Add(params, "Realname", data.Realname)
-		params = params.Add(params, "Mobile", data.Mobile)
-		params = params.Add(params, "Address", data.Address)
-		params = params.Add(params, "SysCreated", data.SysCreated)
-		params = params.Add(params, "SysUpdated", data.SysUpdated)
-		params = params.Add(params, "SysIp", data.SysIp)
+		params = append(params, "Username", data.Username)
+		params = append(params, "Blacktime", data.Blacktime)
+		params = append(params, "Realname", data.Realname)
+		params = append(params, "Mobile", data.Mobile)
+		params = append(params, "Address", data.Address)
+		params = append(params, "SysCreated", data.SysCreated)
+		params = append(params, "SysUpdated", data.SysUpdated)
+		params = append(params, "SysIp", data.SysIp)
 	}
 	_, err := rds.Do("HMSET", params...)
 	if err != nil {

@@ -10,7 +10,8 @@ import (
 	"github.com/kataras/iris/sessions"
 
 	"imooc.com/lottery/conf"
-	)
+	"imooc.com/lottery/cron"
+)
 
 type Configurator func(*Bootstrapper)
 
@@ -109,6 +110,11 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 
 // 启动计划任务服务
 func (b *Bootstrapper) setupCron() {
+	// 服务类应用
+	if conf.RunningCrontabService {
+		cron.ConfigueAppOneCron()
+	}
+	cron.ConfigueAppAllCron()
 }
 
 const (

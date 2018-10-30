@@ -135,10 +135,13 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 					giftInfo.LeftNum = 0
 				}
 				giftInfo.SysStatus = datainfo.SysStatus
+				utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
 			} else {
                 giftInfo.LeftNum = giftInfo.PrizeNum
             }
             if datainfo.PrizeTime != giftInfo.PrizeTime {
+				// 发奖周期发生了变化
+				utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
 			}
 			c.ServiceGift.Update(&giftInfo, []string{"title", "prize_num", "left_num", "prize_code", "prize_time",
 				"img", "displayorder", "gtype", "gdata", "time_begin", "time_end", "sys_updated"})
@@ -151,6 +154,8 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 		giftInfo.SysIp = comm.ClientIP(c.Ctx.Request())
 		giftInfo.SysCreated =  int(time.Now().Unix())
 		c.ServiceGift.Create(&giftInfo)
+		// 更新奖品的发奖计划
+		utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
 	}
 	return mvc.Response{
 		Path: "/admin/gift",

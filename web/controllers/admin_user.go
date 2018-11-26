@@ -26,7 +26,7 @@ func (c *AdminUserController) Get() mvc.Result {
 	pageNext := ""
 	// 数据列表
 	datalist := c.ServiceUser.GetAll(page, size)
-	total := (page - 1) + len(datalist)
+	total := (page - 1)*size + len(datalist)
 	// 数据总数
 	if len(datalist) >= size {
 		total = c.ServiceUser.CountAll()

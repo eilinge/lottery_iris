@@ -28,7 +28,7 @@ func (c *AdminBlackipController) Get() mvc.Result {
 	pageNext := ""
 	// 数据列表
 	datalist := c.ServiceBlackip.GetAll(page, size)
-	total := (page - 1) + len(datalist)
+	total := (page - 1)*size + len(datalist)
 	// 数据总数
 	if len(datalist) >= size {
 		total = int(c.ServiceBlackip.CountAll())

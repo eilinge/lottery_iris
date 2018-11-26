@@ -34,7 +34,7 @@ func (c *AdminResultController) Get() mvc.Result {
 	} else {
 		datalist = c.ServiceResult.GetAll(page, size)
 	}
-	total := (page - 1) + len(datalist)
+	total := (page - 1)*size + len(datalist)
 	// 数据总数
 	if len(datalist) >= size {
 		if giftId > 0 {

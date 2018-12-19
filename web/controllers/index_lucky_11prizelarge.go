@@ -15,7 +15,7 @@ func (api *LuckyApi) prizeLarge(ip string,
 	nowTime := comm.NowUnix()
 	blackTime := 30 * 86400
 	// 更新用户的黑名单信息
-	if userinfo == nil || userinfo.Id <= 0 {
+	if userinfo == nil || userinfo.Id <= 0 || userinfo.Username == "" {
 		userinfo = &models.LtUser{
 			Id:			uid,
 			Username:   username,

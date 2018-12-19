@@ -74,7 +74,11 @@ func (s *userService) Update(data *models.LtUser, columns []string) error {
 }
 
 func (s *userService) Create(data *models.LtUser) error {
-	return s.dao.Create(data)
+    err := s.dao.Create(data)
+  	if err == nil {
+      	s.updateByCache(data, nil)
+  	}
+  	return err
 }
 
 // 从缓存中得到信息

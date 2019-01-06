@@ -6,14 +6,15 @@ package controllers
 
 import (
 	"context"
+	"io/ioutil"
+	"log"
+	"regexp"
+
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/core/errors"
-	"github.com/lunny/log"
 	"imooc.com/lottery/rpc"
 	"imooc.com/lottery/services"
-	"io/ioutil"
-	"regexp"
 )
 
 type RpcController struct {

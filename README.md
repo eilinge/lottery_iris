@@ -1,9 +1,9 @@
 # lottery
 
-Go抽奖系统
+**Go抽奖系统**
 
 
-#1 技术依赖
+## 1 技术依赖
     iris web框架
     redis 客户端
     mysql 客户端
@@ -31,7 +31,7 @@ Go抽奖系统
             SysStatus     int    `xorm:"not null default 0 comment('状态，0 正常，1 已作废，2 已发放') SMALLINT(5)"`
         }
 
-    Go依赖库
+    Go依赖库(项目代码的vendor目录已经全部上传)
         go get github.com/iris-contrib/httpexpect
             https://godoc.org/github.com/iris-contrib/httpexpect#pkg-index
         go get github.com/go-sql-driver/mysql
@@ -51,7 +51,7 @@ Go抽奖系统
         go get github.com/gomodule/redigo/redis
         go get git.apache.org/thrift.git/lib/go/thrift
 
-#2 demo程序
+## 2 demo程序
     annualMeeting 年会抽奖
     ticket 彩票刮奖
     wechatShake 微信摇一摇
@@ -59,19 +59,19 @@ Go抽奖系统
     weiboRedPacket 微博抢红包
     wheel 抽奖大转盘
 
-#M.辅助工具
+## 辅助工具
     通过curl打印出来网络请求的各阶段时间
     curl -s -w %{time_namelookup}::%{time_connect}::%{time_starttransfer}::%{time_total}::%{speed_download} "http://www.so.com/"
 
 
-#安装thrift程序
+## 安装thrift程序
 	brew install thrift
 	go get git.apache.org/thrift.git/lib/go/thrift
 
-#生成代码
+## 生成代码
 	cd /private/var/www/go/src/imooc.com/lottery/thrift
 	thrift -out .. --gen go lucky.thrift
 	thrift -out .. --gen php lucky.thrift
 
-#下载thrift源码，包括各个语言的类库
+## 下载thrift源码，包括各个语言的类库
 	http://www.apache.org/dyn/closer.cgi?path=/thrift/0.11.0/thrift-0.11.0.tar.gz

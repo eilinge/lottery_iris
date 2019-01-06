@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"imooc.com/lottery/bootstrap"
+	"imooc.com/lottery/conf"
 	"imooc.com/lottery/web/middleware/identity"
 	"imooc.com/lottery/web/routes"
-	"fmt"
-	"imooc.com/lottery/conf"
-	)
+)
 
 var port = 8080
 

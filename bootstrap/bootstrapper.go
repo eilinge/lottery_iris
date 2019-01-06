@@ -1,12 +1,13 @@
 package bootstrap
 
 import (
+	"io/ioutil"
 	"time"
 
 	"github.com/gorilla/securecookie"
 	"github.com/kataras/iris"
-	"github.com/kataras/iris/middleware/recover"
 	"github.com/kataras/iris/middleware/logger"
+	"github.com/kataras/iris/middleware/recover"
 	"github.com/kataras/iris/sessions"
 
 	"imooc.com/lottery/conf"
@@ -119,9 +120,9 @@ func (b *Bootstrapper) setupCron() {
 
 const (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = "./public/"
+	StaticAssets = "./public"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
-	Favicon = "favicon.ico"
+	Favicon = "/favicon.ico"
 )
 
 // Bootstrap prepares our application.
@@ -137,7 +138,14 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 
 	// static files
 	b.Favicon(StaticAssets + Favicon)
-	b.StaticWeb(StaticAssets[1:len(StaticAssets)-1], StaticAssets)
+	b.StaticWeb(StaticAssets[1:], StaticAssets)
+	indexHtml, err := ioutil.ReadFile(StaticAssets + "/index.html")
+	if err == nil {
+		b.StaticContent(StaticAssets[1:] + "/", "text/html",
+			indexHtml)
+	}
+	// 不要把目录末尾"/"省略掉
+	iris.WithoutPathCorrectionRedirection(b.Application)
 
 	// crontab
 	b.setupCron()

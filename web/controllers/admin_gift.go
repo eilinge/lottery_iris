@@ -149,7 +149,7 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 			giftInfo.Id = 0
 		}
 	}
-	if giftInfo.Id > 0 {
+	if giftInfo.Id <= 0 {
 		giftInfo.LeftNum = giftInfo.PrizeNum
 		giftInfo.SysIp = comm.ClientIP(c.Ctx.Request())
 		giftInfo.SysCreated =  int(time.Now().Unix())

@@ -130,7 +130,7 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 			// 对比修改的内容项
 			if datainfo.PrizeNum != giftInfo.PrizeNum {
 				// 奖品总数量发生了改变
-				giftInfo.LeftNum = datainfo.LeftNum - datainfo.PrizeNum - giftInfo.PrizeNum
+              giftInfo.LeftNum = datainfo.LeftNum - (datainfo.PrizeNum - giftInfo.PrizeNum)
 				if giftInfo.LeftNum < 0 || giftInfo.PrizeNum <= 0 {
 					giftInfo.LeftNum = 0
 				}

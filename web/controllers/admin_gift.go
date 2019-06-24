@@ -136,9 +136,7 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 				}
 				giftInfo.SysStatus = datainfo.SysStatus
 				utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
-			} else {
-                giftInfo.LeftNum = giftInfo.PrizeNum
-            }
+			}
             if datainfo.PrizeTime != giftInfo.PrizeTime {
 				// 发奖周期发生了变化
 				utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)

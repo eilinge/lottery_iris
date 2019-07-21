@@ -6,7 +6,7 @@ import (
 )
 
 type GiftService interface {
-	GetAll() []*modles.Gift
+	GetAll() []models.Gift
 	CountAll() int64
 	Get(id int) *models.Gift
 	Delete(id int) error
@@ -18,13 +18,13 @@ type giftService struct {
 	Dao *dao.GiftDao
 }
 
-func NewGiftService() *GiftService {
+func NewGiftService() *giftService {
 	return &giftService{
 		Dao: dao.NewGiftDao(nil),
 	}
 }
 
-func (s *giftService) GetAll() []*modles.Gift {
+func (s *giftService) GetAll() []models.Gift {
 	return s.Dao.GetAll()
 }
 
@@ -40,7 +40,7 @@ func (s *giftService) Delete(id int) error {
 	return s.Dao.Delete(id)
 }
 
-func (s *giftService) Update(date *models.Gift, columns []string) error {
+func (s *giftService) Update(data *models.Gift, columns []string) error {
 	return s.Dao.Update(data, columns)
 }
 

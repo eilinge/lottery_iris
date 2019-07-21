@@ -6,7 +6,7 @@ import (
 )
 
 type ResultService interface {
-	GetAll() []*modles.Result
+	GetAll() []models.Result
 	CountAll() int64
 	Get(id int) *models.Result
 	Delete(id int) error
@@ -18,14 +18,14 @@ type resultService struct {
 	Dao *dao.ResultDao
 }
 
-func NewresultService() *ResultService {
+func NewResultService() *resultService {
 	return &resultService{
 		Dao: dao.NewResultDao(nil),
 	}
 }
 
-func (s *resultService) GetAll() []*modles.Result {
-	return s.Dao.GetAll()
+func (s *resultService) GetAll(page, index int) []models.Result {
+	return s.Dao.GetAll(page, index)
 }
 
 func (s *resultService) CountAll() int64 {
@@ -40,7 +40,7 @@ func (s *resultService) Delete(id int) error {
 	return s.Dao.Delete(id)
 }
 
-func (s *resultService) Update(date *models.Result, columns []string) error {
+func (s *resultService) Update(data *models.Result, columns []string) error {
 	return s.Dao.Update(data, columns)
 }
 

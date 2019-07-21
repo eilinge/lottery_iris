@@ -12,7 +12,7 @@ type UserdayDao struct {
 }
 
 func NewUserdayDao(en *xorm.Engine) *UserdayDao {
-	return UserdayDao{
+	return &UserdayDao{
 		Engine: en,
 	}
 }
@@ -27,26 +27,27 @@ func (d *UserdayDao) Get(id int) *models.Userday {
 	return data
 }
 
-func (d *UserdayDao) GetAll() []*models.Userday {
+func (d *UserdayDao) GetAll() []models.Userday {
 	dataList := make([]models.Userday, 0)
 	err := d.Engine.Asc("sys_created").Find(&dataList)
 	if err != nil {
 		log.Println("failed to Userday_dao.GetAll...", err)
 		return nil
 	}
+	return dataList
 }
 
 func (d *UserdayDao) CountAll() int64 {
 	num, err := d.Engine.Count(&models.Userday{})
 	if err != nil {
 		log.Println("failed to Userday_dao.CountAll...", err)
-		return nil
+		return 0
 	}
 	return num
 }
 
 func (d *UserdayDao) Delete(id int) error {
-	data := &models.Userday{Id: id, SysStatus: 1}
+	data := &models.Userday{Id: id}
 	_, err := d.Engine.Id(data.Id).Update(data)
 	if err != nil {
 		log.Println("failed to Userday_dao.Delete...", err)

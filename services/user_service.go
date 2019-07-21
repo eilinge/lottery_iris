@@ -6,7 +6,7 @@ import (
 )
 
 type UserService interface {
-	GetAll() []*modles.User
+	GetAll() []models.User
 	CountAll() int64
 	Get(id int) *models.User
 	Delete(id int) error
@@ -18,13 +18,13 @@ type userService struct {
 	Dao *dao.UserDao
 }
 
-func NewuserService() *UserService {
+func NewUserService() *userService {
 	return &userService{
 		Dao: dao.NewUserDao(nil),
 	}
 }
 
-func (s *userService) GetAll() []*modles.User {
+func (s *userService) GetAll() []models.User {
 	return s.Dao.GetAll()
 }
 
@@ -40,7 +40,7 @@ func (s *userService) Delete(id int) error {
 	return s.Dao.Delete(id)
 }
 
-func (s *userService) Update(date *models.User, columns []string) error {
+func (s *userService) Update(data *models.User, columns []string) error {
 	return s.Dao.Update(data, columns)
 }
 

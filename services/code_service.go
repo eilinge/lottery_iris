@@ -6,7 +6,7 @@ import (
 )
 
 type CodeService interface {
-	GetAll() []*modles.Code
+	GetAll() []models.Code
 	CountAll() int64
 	Get(id int) *models.Code
 	Delete(id int) error
@@ -18,13 +18,13 @@ type codeService struct {
 	Dao *dao.CodeDao
 }
 
-func NewcodeService() *CodeService {
+func NewCodeService() *codeService {
 	return &codeService{
 		Dao: dao.NewCodeDao(nil),
 	}
 }
 
-func (s *codeService) GetAll() []*modles.Code {
+func (s *codeService) GetAll() []*models.Code {
 	return s.Dao.GetAll()
 }
 
@@ -40,7 +40,7 @@ func (s *codeService) Delete(id int) error {
 	return s.Dao.Delete(id)
 }
 
-func (s *codeService) Update(date *models.Code, columns []string) error {
+func (s *codeService) Update(data *models.Code, columns []string) error {
 	return s.Dao.Update(data, columns)
 }
 

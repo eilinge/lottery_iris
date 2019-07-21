@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"log"
+	"lottery/models"
+
 	"github.com/go-xorm/xorm"
 )
 
@@ -9,7 +12,7 @@ type CodeDao struct {
 }
 
 func NewCodeDao(en *xorm.Engine) *CodeDao {
-	return CodeDao{
+	return &CodeDao{
 		Engine: en,
 	}
 }
@@ -17,7 +20,7 @@ func NewCodeDao(en *xorm.Engine) *CodeDao {
 func (d *CodeDao) Get(id int) *models.Code {
 	data := &models.Code{Id: id}
 	ok, err := d.Engine.Get(data)
-	if  !ok || err != nil {
+	if !ok || err != nil {
 		log.Println("failed to Code_dao.Get...", err)
 		return nil
 	}
@@ -25,19 +28,20 @@ func (d *CodeDao) Get(id int) *models.Code {
 }
 
 func (d *CodeDao) GetAll() []*models.Code {
-	dataList := make([]models.Code, 0)
+	dataList := make([]*models.Code, 0)
 	err := d.Engine.Desc("id").Find(&dataList)
-	if  err != nil {
+	if err != nil {
 		log.Println("failed to Code_dao.GetAll...", err)
 		return nil
 	}
+	return dataList
 }
 
 func (d *CodeDao) CountAll() int64 {
 	num, err := d.Engine.Count(&models.Code{})
-	if  err != nil {
+	if err != nil {
 		log.Println("failed to Code_dao.CountAll...", err)
-		return nil
+		return 0
 	}
 	return num
 }
@@ -45,7 +49,7 @@ func (d *CodeDao) CountAll() int64 {
 func (d *CodeDao) Delete(id int) error {
 	data := &models.Code{Id: id, SysStatus: 1}
 	_, err := d.Engine.Id(data.Id).Update(data)
-	if  err != nil {
+	if err != nil {
 		log.Println("failed to Code_dao.Delete...", err)
 		return err
 	}
@@ -54,7 +58,7 @@ func (d *CodeDao) Delete(id int) error {
 
 func (d *CodeDao) Update(data *models.Code, columns []string) error {
 	_, err := d.Engine.Id(data.Id).MustCols(columns...).Update(data)
-	if  err != nil {
+	if err != nil {
 		log.Println("failed to Code_dao.Update...", err)
 		return err
 	}
@@ -63,7 +67,7 @@ func (d *CodeDao) Update(data *models.Code, columns []string) error {
 
 func (d *CodeDao) Create(data *models.Code) error {
 	_, err := d.Engine.Insert(data)
-	if  err != nil {
+	if err != nil {
 		log.Println("failed to Code_dao.Update...", err)
 		return err
 	}

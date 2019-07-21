@@ -2,6 +2,11 @@ package datasource
 
 import (
 	"fmt"
+	"log"
+	"lottery/conf"
+	"sync"
+	"time"
+
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -22,15 +27,14 @@ func InstanceCache() *RedisConn {
 	if cacheInstance != nil {
 		return cacheInstance
 	}
-	
-	NewCache()
+
+	return NewCache()
 }
 
-func (rds *RedisConn) Do(command string, args ...interface{}) 
-	(reply interface{}, err error) {
+func (rds *RedisConn) Do(command string, args ...interface{}) (reply interface{}, err error) {
 	conn := rds.Pool.Get()
 	defer conn.Close() // 该连接执行完之后, 放入连接池中
-	
+
 	t1 := time.Now().UnixNano()
 	reply, err = conn.Do(command, args...)
 	if err != nil {
@@ -42,7 +46,7 @@ func (rds *RedisConn) Do(command string, args ...interface{})
 
 	t2 := time.Now().UnixNano()
 	if rds.showDebug {
-		fmt.Printf("[redis] [info] [%dus] cmd=%s, err=%s, args=%v, reply=%s\n", 
+		fmt.Printf("[redis] [info] [%dus] cmd=%s, err=%s, args=%v, reply=%s\n",
 			(t2-t1)/1000, command, err, args, reply)
 	}
 	return reply, err
@@ -69,13 +73,13 @@ func NewCache() *RedisConn {
 			_, err := c.Do("PING")
 			return err
 		},
-		MaxIdle: 10000,	// 最大连接数
-		MaxActive: 10000, // 最大活跃数
-		IdleTimeout: 0, // 超时时间
-		Wait: false,
-		MaxConnLifetime: 0,	// 活跃时间
+		MaxIdle:         10000, // 最大连接数
+		MaxActive:       10000, // 最大活跃数
+		IdleTimeout:     0,     // 超时时间
+		Wait:            false,
+		MaxConnLifetime: 0, // 活跃时间
 	}
-	instance := &RedisConn {
+	instance := &RedisConn{
 		Pool: &pool,
 	}
 	cacheInstance = instance

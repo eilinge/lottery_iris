@@ -5,8 +5,8 @@ import (
 	"lottery/models"
 )
 
-type blackipService interface {
-	GetAll() []*modles.Blackip
+type BlackipService interface {
+	GetAll() []models.Blackip
 	CountAll() int64
 	Get(id int) *models.Blackip
 	Delete(id int) error
@@ -19,13 +19,13 @@ type blackipService struct {
 	Dao *dao.BlackipDao
 }
 
-func NewblackipService() *BlackipService {
+func NewBlackipService() *blackipService {
 	return &blackipService{
 		Dao: dao.NewBlackipDao(nil),
 	}
 }
 
-func (s *blackipService) GetAll() []*modles.Blackip {
+func (s *blackipService) GetAll() []models.Blackip {
 	return s.Dao.GetAll()
 }
 
@@ -41,7 +41,7 @@ func (s *blackipService) Delete(id int) error {
 	return s.Dao.Delete(id)
 }
 
-func (s *blackipService) Update(date *models.Blackip, columns []string) error {
+func (s *blackipService) Update(data *models.Blackip, columns []string) error {
 	return s.Dao.Update(data, columns)
 }
 

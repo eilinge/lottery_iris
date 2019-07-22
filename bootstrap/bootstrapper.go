@@ -4,6 +4,7 @@ import (
 	"lottery/conf"
 	"strconv"
 	"time"
+	"io/ioutil"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/middleware/logger"
@@ -84,6 +85,7 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 	})
 }
 
+// Configure accepts configurations and runs them inside the Bootstraper's context.
 func (b *Bootstrapper) Configure(cs ...Configurator) {
 	for _, c := range cs {
 		c(b)
@@ -95,8 +97,10 @@ func (b *Bootstrapper) setupCron() {
 }
 
 const (
-	StaticAssets = "./public/"
-	Favicon      = "favicon.ico"
+	// StaticAssets is the root directory for public assets like images, css, js.
+	StaticAssets = "./public"
+	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
+	Favicon      = "/favicon.ico"
 )
 
 // Bootstrap init
@@ -106,7 +110,14 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 
 	// static files
 	b.Favicon(StaticAssets + Favicon)
-	b.StaticWeb(StaticAssets[1:len(StaticAssets)-1], StaticAssets)
+	b.StaticWeb(StaticAssets[1:], StaticAssets)
+	indexHTML, err := ioutil.ReadFile(StaticAssets + "/index.html")
+	if err == nil {
+		b.StaticContent(StaticAssets[1:] + "/", "text/html",
+			indexHTML)
+	}
+	// 不要把目录末尾"/"省略掉
+	iris.WithoutPathCorrectionRedirection(b.Application)
 
 	// middleware, after static files
 	b.Use(recover.New())

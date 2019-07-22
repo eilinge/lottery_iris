@@ -1,75 +1,95 @@
 package dao
 
 import (
-	"log"
-	"lottery/models"
-
 	"github.com/go-xorm/xorm"
+
+	"lottery/models"
 )
 
 type UserdayDao struct {
-	Engine *xorm.Engine
+	engine *xorm.Engine
 }
 
-func NewUserdayDao(en *xorm.Engine) *UserdayDao {
+func NewUserdayDao(engine *xorm.Engine) *UserdayDao {
 	return &UserdayDao{
-		Engine: en,
+		engine: engine,
 	}
 }
 
-func (d *UserdayDao) Get(id int) *models.Userday {
-	data := &models.Userday{Id: id}
-	ok, err := d.Engine.Get(data)
-	if !ok || err != nil {
-		log.Println("failed to Userday_dao.Get...", err)
-		return nil
+func (d *UserdayDao) Get(id int) *models.LtUserday {
+	data := &models.LtUserday{Id: id}
+	ok, err := d.engine.Get(data)
+	if ok && err == nil {
+		return data
+	} else {
+		data.Id = 0
+		return data
 	}
-	return data
 }
 
-func (d *UserdayDao) GetAll() []models.Userday {
-	dataList := make([]models.Userday, 0)
-	err := d.Engine.Asc("sys_created").Find(&dataList)
+func (d *UserdayDao) GetAll(page, size int) []models.LtUserday {
+	offset := (page - 1) * size
+	datalist := make([]models.LtUserday, 0)
+	err := d.engine.
+		Desc("id").
+		Limit(size, offset).
+		Find(&datalist)
 	if err != nil {
-		log.Println("failed to Userday_dao.GetAll...", err)
-		return nil
+		return datalist
+	} else {
+		return datalist
 	}
-	return dataList
 }
 
 func (d *UserdayDao) CountAll() int64 {
-	num, err := d.Engine.Count(&models.Userday{})
+	num, err := d.engine.
+		Count(&models.LtUserday{})
 	if err != nil {
-		log.Println("failed to Userday_dao.CountAll...", err)
 		return 0
+	} else {
+		return num
 	}
-	return num
 }
 
-func (d *UserdayDao) Delete(id int) error {
-	data := &models.Userday{Id: id}
-	_, err := d.Engine.Id(data.Id).Update(data)
+func (d *UserdayDao) Search(uid, day int) []models.LtUserday {
+	datalist := make([]models.LtUserday, 0)
+	err := d.engine.
+		Where("uid=?", uid).
+		Where("day=?", day).
+		Desc("id").
+		Find(&datalist)
 	if err != nil {
-		log.Println("failed to Userday_dao.Delete...", err)
-		return err
+		return datalist
+	} else {
+		return datalist
 	}
-	return nil
 }
 
-func (d *UserdayDao) Update(data *models.Userday, columns []string) error {
-	_, err := d.Engine.Id(data.Id).MustCols(columns...).Update(data)
-	if err != nil {
-		log.Println("failed to Userday_dao.Update...", err)
-		return err
+func (d *UserdayDao) Count(uid, day int) int {
+	info := &models.LtUserday{}
+	ok, err := d.engine.
+		Where("uid=?", uid).
+		Where("day=?", day).
+		Get(info)
+	if !ok || err != nil {
+		return 0
+	} else {
+		return info.Num
 	}
-	return nil
 }
 
-func (d *UserdayDao) Create(data *models.Userday) error {
-	_, err := d.Engine.Insert(data)
-	if err != nil {
-		log.Println("failed to Userday_dao.Update...", err)
-		return err
-	}
-	return nil
+//func (d *UserdayDao) Delete(id int) error {
+//	data := &models.LtUserday{Id: id, SysStatus: 1}
+//	_, err := d.engine.Id(data.Id).Update(data)
+//	return err
+//}
+
+func (d *UserdayDao) Update(data *models.LtUserday, columns []string) error {
+	_, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
+	return err
+}
+
+func (d *UserdayDao) Create(data *models.LtUserday) error {
+	_, err := d.engine.Insert(data)
+	return err
 }

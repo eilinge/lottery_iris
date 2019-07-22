@@ -1,75 +1,124 @@
 package dao
 
-import (
-	"log"
-	"lottery/models"
+/*
+ 抽奖系统的数据库操作
+*/
 
+import (
 	"github.com/go-xorm/xorm"
+
+	"lottery/models"
 )
 
+// CodeDao Database code
 type CodeDao struct {
-	Engine *xorm.Engine
+	engine *xorm.Engine
 }
 
-func NewCodeDao(en *xorm.Engine) *CodeDao {
+// NewCodeDao get new *CodeDao
+func NewCodeDao(engine *xorm.Engine) *CodeDao {
 	return &CodeDao{
-		Engine: en,
+		engine: engine,
 	}
 }
 
-func (d *CodeDao) Get(id int) *models.Code {
-	data := &models.Code{Id: id}
-	ok, err := d.Engine.Get(data)
-	if !ok || err != nil {
-		log.Println("failed to Code_dao.Get...", err)
-		return nil
+// Get get code by id
+func (d *CodeDao) Get(id int) *models.LtCode {
+	data := &models.LtCode{Id: id}
+	ok, err := d.engine.Get(data)
+	if ok && err == nil {
+		return data
 	}
+	data.Id = 0
 	return data
 }
 
-func (d *CodeDao) GetAll() []*models.Code {
-	dataList := make([]*models.Code, 0)
-	err := d.Engine.Desc("id").Find(&dataList)
+// GetAll get all from code
+func (d *CodeDao) GetAll(page, size int) []models.LtCode {
+	offset := (page - 1) * size
+	datalist := make([]models.LtCode, 0)
+	err := d.engine.
+		Desc("id").
+		Limit(size, offset).
+		Find(&datalist)
 	if err != nil {
-		log.Println("failed to Code_dao.GetAll...", err)
-		return nil
+		return datalist
 	}
-	return dataList
+	return datalist
 }
 
+// CountAll count database code
 func (d *CodeDao) CountAll() int64 {
-	num, err := d.Engine.Count(&models.Code{})
+	num, err := d.engine.
+		Count(&models.LtCode{})
 	if err != nil {
-		log.Println("failed to Code_dao.CountAll...", err)
 		return 0
 	}
 	return num
 }
 
+// CountByGift ...
+func (d *CodeDao) CountByGift(giftID int) int64 {
+	num, err := d.engine.
+		Where("gift_id=?", giftID).
+		Count(&models.LtCode{})
+	if err != nil {
+		return 0
+	}
+	return num
+
+}
+
+// Search by giftID
+func (d *CodeDao) Search(giftID int) []models.LtCode {
+	datalist := make([]models.LtCode, 0)
+	err := d.engine.
+		Where("gift_id=?", giftID).
+		Desc("id").
+		Find(&datalist)
+	if err != nil {
+		return datalist
+	}
+	return datalist
+}
+
+// Delete delete by id
 func (d *CodeDao) Delete(id int) error {
-	data := &models.Code{Id: id, SysStatus: 1}
-	_, err := d.Engine.Id(data.Id).Update(data)
-	if err != nil {
-		log.Println("failed to Code_dao.Delete...", err)
-		return err
-	}
-	return nil
+	data := &models.LtCode{Id: id, SysStatus: 1}
+	_, err := d.engine.Id(data.Id).Update(data)
+	return err
 }
 
-func (d *CodeDao) Update(data *models.Code, columns []string) error {
-	_, err := d.Engine.Id(data.Id).MustCols(columns...).Update(data)
-	if err != nil {
-		log.Println("failed to Code_dao.Update...", err)
-		return err
-	}
-	return nil
+// Update update more columns
+func (d *CodeDao) Update(data *models.LtCode, columns []string) error {
+	_, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
+	return err
 }
 
-func (d *CodeDao) Create(data *models.Code) error {
-	_, err := d.Engine.Insert(data)
-	if err != nil {
-		log.Println("failed to Code_dao.Update...", err)
-		return err
+// Create insert new code
+func (d *CodeDao) Create(data *models.LtCode) error {
+	_, err := d.engine.Insert(data)
+	return err
+}
+
+// NextUsingCode 找到下一个可用的最小的优惠券
+func (d *CodeDao) NextUsingCode(giftID, codeID int) *models.LtCode {
+	datalist := make([]models.LtCode, 0)
+	err := d.engine.Where("gift_id=?", giftID).
+		Where("sys_status=?", 0).
+		Where("id>?", codeID).
+		Asc("id").Limit(1).
+		Find(&datalist)
+	if err != nil || len(datalist) < 1 {
+		return nil
 	}
-	return nil
+	return &datalist[0]
+
+}
+
+// UpdateByCode 根据唯一的code来更新
+func (d *CodeDao) UpdateByCode(data *models.LtCode, columns []string) error {
+	_, err := d.engine.Where("code=?", data.Code).
+		MustCols(columns...).Update(data)
+	return err
 }

@@ -6,7 +6,7 @@ import (
 	"lottery/bootstrap"
 	"lottery/services"
 	"lottery/web/controllers"
-	// "lottery/web/middleware"
+	"lottery/web/middleware"
 )
 
 // Configure registers the necessary routes to the app.
@@ -30,10 +30,20 @@ func Configure(b *bootstrap.Bootstrapper) {
 	index.Handle(new(controllers.IndexController))
 
 	// "/admin" AdminController
-	// admin := mvc.New(b.Party("/admin"))
-	// admin.Router.Use(middleware.BasicAuth)
-	// admin.Register(superstarService)
-	// admin.Handle(new(controllers.AdminController))
+	admin := mvc.New(b.Party("/admin"))
+	admin.Router.Use(middleware.BasicAuth)
+	admin.Register(userService,
+		giftService,
+		codeService,
+		resultService,
+		userdayService,
+		blackipService)
+	admin.Handle(new(controllers.AdminController))
+
+	// "/admin/gift" AdminController
+	adminGift := admin.Party("/gift")
+	adminGift.Register(giftService)
+	adminGift.Handle(new(controllers.AdminGiftController))
 
 	// 传统设置路由
 	//b.Get("/follower/{id:long}", GetFollowerHandler)

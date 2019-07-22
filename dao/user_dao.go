@@ -1,75 +1,81 @@
 package dao
 
 import (
-	"log"
-	"lottery/models"
-
 	"github.com/go-xorm/xorm"
+
+	"lottery/models"
 )
 
 type UserDao struct {
-	Engine *xorm.Engine
+	engine *xorm.Engine
 }
 
-func NewUserDao(en *xorm.Engine) *UserDao {
+func NewUserDao(engine *xorm.Engine) *UserDao {
 	return &UserDao{
-		Engine: en,
+		engine: engine,
 	}
 }
 
-func (d *UserDao) Get(id int) *models.User {
-	data := &models.User{Id: id}
-	ok, err := d.Engine.Get(data)
-	if !ok || err != nil {
-		log.Println("failed to User_dao.Get...", err)
-		return nil
+func (d *UserDao) Get(id int) *models.LtUser {
+	data := &models.LtUser{Id: id}
+	ok, err := d.engine.Get(data)
+	if ok && err == nil {
+		return data
+	} else {
+		data.Id = 0
+		return data
 	}
-	return data
 }
 
-func (d *UserDao) GetAll() []models.User {
-	dataList := make([]models.User, 0)
-	err := d.Engine.Find(&dataList)
+func (d *UserDao) GetAll(page, size int) []models.LtUser {
+	offset := (page - 1) * size
+	datalist := make([]models.LtUser, 0)
+	err := d.engine.
+		Desc("id").
+		Limit(size, offset).
+		Find(&datalist)
 	if err != nil {
-		log.Println("failed to User_dao.GetAll...", err)
-		return nil
+		return datalist
+	} else {
+		return datalist
 	}
-	return dataList
 }
 
-func (d *UserDao) CountAll() int64 {
-	num, err := d.Engine.Count(&models.User{})
+func (d *UserDao) CountAll() int {
+	num, err := d.engine.
+		Count(&models.LtUser{})
 	if err != nil {
-		log.Println("failed to User_dao.CountAll...", err)
 		return 0
+	} else {
+		return int(num)
 	}
-	return num
 }
 
-func (d *UserDao) Delete(id int) error {
-	data := &models.User{Id: id}
-	_, err := d.Engine.Id(data.Id).Update(data)
-	if err != nil {
-		log.Println("failed to User_dao.Delete...", err)
-		return err
-	}
-	return nil
+//func (d *UserDao) Search(country string) []models.LtUser {
+//	datalist := make([]models.LtUser, 0)
+//	err := d.engine.
+//		Where("country=?", country).
+//		Desc("id").
+//		Find(&datalist)
+//	if err != nil {
+//		return datalist
+//	} else {
+//		return datalist
+//	}
+//}
+
+//func (d *UserDao) Delete(id int) error {
+//	data := &models.LtUser{Id: id, SysStatus: 1}
+//	_, err := d.engine.Id(data.Id).Update(data)
+//	return err
+//}
+
+func (d *UserDao) Update(data *models.LtUser, columns []string) error {
+	_, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
+	return err
 }
 
-func (d *UserDao) Update(data *models.User, columns []string) error {
-	_, err := d.Engine.Id(data.Id).MustCols(columns...).Update(data)
-	if err != nil {
-		log.Println("failed to User_dao.Update...", err)
-		return err
-	}
-	return nil
-}
-
-func (d *UserDao) Create(data *models.User) error {
-	_, err := d.Engine.Insert(data)
-	if err != nil {
-		log.Println("failed to User_dao.Update...", err)
-		return err
-	}
-	return nil
+func (d *UserDao) Create(data *models.LtUser) error {
+	_, err := d.engine.Insert(data)
+	return err
 }

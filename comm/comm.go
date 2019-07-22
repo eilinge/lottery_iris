@@ -17,52 +17,50 @@ import (
 	"lottery/conf"
 )
 
-// 当前时间的时间戳
+// NowUnix 当前时间的时间戳
 func NowUnix() int {
 	return int(time.Now().In(conf.SysTimeLocation).Unix())
 }
 
-// 将unix时间戳格式化为yyyymmdd H:i:s格式字符串
+// FormatFromUnixTime 将unix时间戳格式化为yyyymmdd H:i:s格式字符串
 func FormatFromUnixTime(t int64) string {
 	if t > 0 {
 		return time.Unix(t, 0).Format(conf.SysTimeform)
-	} else {
-		return time.Now().Format(conf.SysTimeform)
 	}
+	return time.Now().Format(conf.SysTimeform)
+
 }
 
-// 将unix时间戳格式化为yyyymmdd格式字符串
+// FormatFromUnixTimeShort 将unix时间戳格式化为yyyymmdd格式字符串
 func FormatFromUnixTimeShort(t int64) string {
 	if t > 0 {
 		return time.Unix(t, 0).Format(conf.SysTimeformShort)
-	} else {
-		return time.Now().Format(conf.SysTimeformShort)
 	}
+	return time.Now().Format(conf.SysTimeformShort)
 }
 
-// 将字符串转成时间
+// ParseTime 将字符串转成时间
 func ParseTime(str string) (time.Time, error) {
 	return time.ParseInLocation(conf.SysTimeform, str, conf.SysTimeLocation)
 }
 
-// 得到一个随机数
+// Random 得到一个随机数
 func Random(max int) int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	if max < 1 {
 		return r.Int()
-	} else {
-		return r.Intn(max)
 	}
+	return r.Intn(max)
 }
 
-// 对字符串进行签名
+// CreateSign 对字符串进行签名
 func CreateSign(str string) string {
 	str = string(conf.SignSecret) + str
 	sign := fmt.Sprintf("%x", md5.Sum([]byte(str)))
 	return sign
 }
 
-// 对一个字符串进行加密
+// encrypt 对一个字符串进行加密
 func encrypt(key, text []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -79,7 +77,7 @@ func encrypt(key, text []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
-// 对一个字符串进行解密
+// decrypt 对一个字符串进行解密
 func decrypt(key, text []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -99,7 +97,7 @@ func decrypt(key, text []byte) ([]byte, error) {
 	return data, nil
 }
 
-// addslashes() 函数返回在预定义字符之前添加反斜杠的字符串。
+// Addslashes 函数返回在预定义字符之前添加反斜杠的字符串。
 // 预定义字符是：
 // 单引号（'）
 // 双引号（"）
@@ -119,7 +117,7 @@ func Addslashes(str string) string {
 	return string(tmpRune)
 }
 
-// stripslashes() 函数删除由 addslashes() 函数添加的反斜杠。
+// Stripslashes 函数删除由 addslashes() 函数添加的反斜杠。
 func Stripslashes(str string) string {
 	dstRune := []rune{}
 	strRune := []rune(str)
@@ -133,8 +131,8 @@ func Stripslashes(str string) string {
 	return string(dstRune)
 }
 
-// 将字符串的IP转化为数字
-func Ip4toInt(ip string) int64 {
+// IP4toInt 将字符串的IP转化为数字
+func IP4toInt(ip string) int64 {
 	bits := strings.Split(ip, ".")
 	if len(bits) == 4 {
 		b0, _ := strconv.Atoi(bits[0])
@@ -147,19 +145,18 @@ func Ip4toInt(ip string) int64 {
 		sum += int64(b2) << 8
 		sum += int64(b3)
 		return sum
-	} else {
-		return 0
 	}
+	return 0
 }
 
-// 得到当前时间到下一天零点的延时
+// NextDayDuration 得到当前时间到下一天零点的延时
 func NextDayDuration() time.Duration {
 	year, month, day := time.Now().Add(time.Hour * 24).Date()
 	next := time.Date(year, month, day, 0, 0, 0, 0, conf.SysTimeLocation)
 	return next.Sub(time.Now())
 }
 
-// 从接口类型安全获取到int64
+// GetInt64 从接口类型安全获取到int64
 func GetInt64(i interface{}, d int64) int64 {
 	if i == nil {
 		return d
@@ -169,9 +166,8 @@ func GetInt64(i interface{}, d int64) int64 {
 		num, err := strconv.Atoi(i.(string))
 		if err != nil {
 			return d
-		} else {
-			return int64(num)
 		}
+		return int64(num)
 	case []byte:
 		bits := i.([]byte)
 		if len(bits) == 8 {
@@ -180,9 +176,8 @@ func GetInt64(i interface{}, d int64) int64 {
 			num, err := strconv.Atoi(string(bits))
 			if err != nil {
 				return d
-			} else {
-				return int64(num)
 			}
+			return int64(num)
 		}
 	case uint:
 		return int64(i.(uint))
@@ -212,7 +207,7 @@ func GetInt64(i interface{}, d int64) int64 {
 	return d
 }
 
-// 从接口类型安全获取到字符串类型
+// GetString 从接口类型安全获取到字符串类型
 func GetString(str interface{}, d string) string {
 	if str == nil {
 		return d
@@ -226,7 +221,7 @@ func GetString(str interface{}, d string) string {
 	return fmt.Sprintf("%s", str)
 }
 
-// 从map中得到指定的key
+// GetInt64FromMap 从map中得到指定的key
 func GetInt64FromMap(dm map[string]interface{}, key string, dft int64) int64 {
 	data, ok := dm[key]
 	if !ok {
@@ -235,7 +230,7 @@ func GetInt64FromMap(dm map[string]interface{}, key string, dft int64) int64 {
 	return GetInt64(data, dft)
 }
 
-// 从map中得到指定的key
+// GetInt64FromStringMap 从map中得到指定的key
 func GetInt64FromStringMap(dm map[string]string, key string, dft int64) int64 {
 	data, ok := dm[key]
 	if !ok {
@@ -244,7 +239,7 @@ func GetInt64FromStringMap(dm map[string]string, key string, dft int64) int64 {
 	return GetInt64(data, dft)
 }
 
-// 从map中得到指定的key
+// GetStringFromMap 从map中得到指定的key
 func GetStringFromMap(dm map[string]interface{}, key string, dft string) string {
 	data, ok := dm[key]
 	if !ok {
@@ -253,7 +248,7 @@ func GetStringFromMap(dm map[string]interface{}, key string, dft string) string 
 	return GetString(data, dft)
 }
 
-// 从map中得到指定的key
+// GetStringFromStringMap 从map中得到指定的key
 func GetStringFromStringMap(dm map[string]string, key string, dft string) string {
 	data, ok := dm[key]
 	if !ok {

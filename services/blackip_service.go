@@ -4,13 +4,14 @@
 package services
 
 import (
+	"fmt"
+	"log"
+	"lottery/comm"
 	"lottery/dao"
 	"lottery/datasource"
 	"lottery/models"
 	"sync"
-	"lottery/comm"
-		"fmt"
-	"log"
+
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -76,7 +77,7 @@ func (s *blackipService) GetByIp(ip string) *models.LtBlackip {
 	data := s.getByCache(ip)
 	if data == nil || data.Ip == "" {
 		// 再从数据库中读取数据
-		data = s.dao.GetByIp(ip)
+		data = s.dao.GetByIP(ip)
 		if data == nil || data.Ip == "" {
 			data = &models.LtBlackip{Ip: ip}
 		}
@@ -85,7 +86,7 @@ func (s *blackipService) GetByIp(ip string) *models.LtBlackip {
 	return data
 }
 
-func (s *blackipService) getByCache(ip string) *models.LtBlackip  {
+func (s *blackipService) getByCache(ip string) *models.LtBlackip {
 	// 集群模式，redis缓存
 	key := fmt.Sprintf("info_blackip_%s", ip)
 	rds := datasource.InstanceCache()

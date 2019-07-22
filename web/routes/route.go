@@ -45,6 +45,26 @@ func Configure(b *bootstrap.Bootstrapper) {
 	adminGift.Register(giftService)
 	adminGift.Handle(new(controllers.AdminGiftController))
 
+	// "/admin/code" AdminController
+	adminCode := admin.Party("/code")
+	adminCode.Register(codeService)
+	adminCode.Handle(new(controllers.AdminCodeController))
+
+	// "/admin/result" AdminController
+	adminResult := admin.Party("/result")
+	adminResult.Register(resultService)
+	adminResult.Handle(new(controllers.AdminResultController))
+
+	// "/admin/user" AdminController
+	adminUser := admin.Party("/user")
+	adminUser.Register(userService)
+	adminUser.Handle(new(controllers.AdminUserController))
+
+	// "/admin/user" AdminController
+	adminBlackip := admin.Party("/blackip")
+	adminBlackip.Register(blackipService)
+	adminBlackip.Handle(new(controllers.AdminBlackipController))
+
 	// 传统设置路由
 	//b.Get("/follower/{id:long}", GetFollowerHandler)
 	//b.Get("/following/{id:long}", GetFollowingHandler)

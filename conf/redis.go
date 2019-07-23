@@ -11,7 +11,7 @@ type RdsConfig struct {
 var RdsCacheList = []RdsConfig{
 	{
 		Host:      "127.0.0.1",
-		Port:      3306,
+		Port:      6379,
 		User:      "root",
 		Pwd:       "tester",
 		IsRunning: true,

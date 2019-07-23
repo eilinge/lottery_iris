@@ -1,8 +1,4 @@
-/**
- * 首页根目录的Controller
- * http://localhost:8080/
- */
-package controllers
+package indexcon
 
 import (
 	"github.com/kataras/iris"
@@ -77,20 +73,3 @@ func (c *IndexController) GetLogout() {
 	comm.Redirect(c.Ctx.ResponseWriter(),
 		"/public/index.html?from=logout")
 }
-// GetClearcache ...
-// 集群多服务器的时候，才用得上这个接口
-// 性能优化的时候才考虑，加上本机的SQL缓存
-// http://localhost:8080/clearcache
-/*
-func (c *IndexController) GetClearcache() mvc.Result {
-	// *xorm.Engine.ClearCache()
-	err := datasource.InstanceMaster().ClearCache(&models.StarInfo{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	// set the model and render the view template.
-	return mvc.Response{
-		Text: "xorm缓存清除成功",
-	}
-}
-*/

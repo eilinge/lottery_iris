@@ -2,7 +2,7 @@
  * 首页根目录的Controller
  * http://localhost:8080/
  */
-package controllers
+package admincon
 
 import (
 	"fmt"

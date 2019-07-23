@@ -2,7 +2,7 @@
  * 首页根目录的Controller
  * http://localhost:8080/
  */
-package controllers
+package admincon
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func (c *AdminCodeController) Get() mvc.Result {
 	giftID := c.Ctx.URLParamIntDefault("gift_id", 0)
 	page := c.Ctx.URLParamIntDefault("page", 1)
 
-	size := 100
+	size := 3
 	pagePrev := ""
 	pageNext := ""
 

@@ -51,13 +51,10 @@ func (s *userService) CountAll() int {
 //}
 
 func (s *userService) Get(id int) *models.LtUser {
-	data := s.getByCache(id)
+
+	data := s.dao.Get(id)
 	if data == nil || data.Id <= 0 {
-		data = s.dao.Get(id)
-		if data == nil || data.Id <= 0 {
-			data = &models.LtUser{Id: id}
-		}
-		s.setByCache(data)
+		data = &models.LtUser{Id: id}
 	}
 	return data
 }
@@ -67,17 +64,12 @@ func (s *userService) Get(id int) *models.LtUser {
 //}
 
 func (s *userService) Update(data *models.LtUser, columns []string) error {
-	// 先更新缓存
-	s.updateByCache(data, columns)
 	// 然后再更新数据
 	return s.dao.Update(data, columns)
 }
 
 func (s *userService) Create(data *models.LtUser) error {
     err := s.dao.Create(data)
-  	if err == nil {
-      	s.updateByCache(data, nil)
-  	}
   	return err
 }
 
@@ -107,44 +99,4 @@ func (s *userService) getByCache(id int) *models.LtUser {
 		SysIp:      comm.GetStringFromStringMap(dataMap, "SysIp", ""),
 	}
 	return data
-}
-
-// 将信息更新到缓存
-func (s *userService) setByCache(data *models.LtUser) {
-	if data == nil || data.Id <= 0 {
-		return
-	}
-	id := data.Id
-	// 集群模式，redis缓存
-	key := fmt.Sprintf("info_user_%d", id)
-	rds := datasource.InstanceCache()
-	// 数据更新到redis缓存
-	params := []interface{}{key}
-	params = append(params, "Id", id)
-	if data.Username != "" {
-		params = append(params, "Username", data.Username)
-		params = append(params, "Blacktime", data.Blacktime)
-		params = append(params, "Realname", data.Realname)
-		params = append(params, "Mobile", data.Mobile)
-		params = append(params, "Address", data.Address)
-		params = append(params, "SysCreated", data.SysCreated)
-		params = append(params, "SysUpdated", data.SysUpdated)
-		params = append(params, "SysIp", data.SysIp)
-	}
-	_, err := rds.Do("HMSET", params...)
-	if err != nil {
-		log.Println("user_service.setByCache HMSET params=", params, ", error=", err)
-	}
-}
-
-// 数据更新了，直接清空缓存数据
-func (s *userService) updateByCache(data *models.LtUser, columns []string) {
-	if data == nil || data.Id <= 0 {
-		return
-	}
-	// 集群模式，redis缓存
-	key := fmt.Sprintf("info_user_%d", data.Id)
-	rds := datasource.InstanceCache()
-	// 删除redis中的缓存
-	rds.Do("DEL", key)
 }

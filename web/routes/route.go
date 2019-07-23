@@ -5,7 +5,8 @@ import (
 
 	"lottery/bootstrap"
 	"lottery/services"
-	"lottery/web/controllers"
+	"lottery/web/controllers/admincon"
+	"lottery/web/controllers/indexcon"
 	"lottery/web/middleware"
 )
 
@@ -27,7 +28,7 @@ func Configure(b *bootstrap.Bootstrapper) {
 		resultService,
 		userdayService,
 		blackipService)
-	index.Handle(new(controllers.IndexController))
+	index.Handle(new(indexcon.IndexController))
 
 	// "/admin" AdminController
 	admin := mvc.New(b.Party("/admin"))
@@ -38,32 +39,32 @@ func Configure(b *bootstrap.Bootstrapper) {
 		resultService,
 		userdayService,
 		blackipService)
-	admin.Handle(new(controllers.AdminController))
+	admin.Handle(new(admincon.AdminController))
 
 	// "/admin/gift" AdminController
 	adminGift := admin.Party("/gift")
 	adminGift.Register(giftService)
-	adminGift.Handle(new(controllers.AdminGiftController))
+	adminGift.Handle(new(admincon.AdminGiftController))
 
 	// "/admin/code" AdminController
 	adminCode := admin.Party("/code")
 	adminCode.Register(codeService)
-	adminCode.Handle(new(controllers.AdminCodeController))
+	adminCode.Handle(new(admincon.AdminCodeController))
 
 	// "/admin/result" AdminController
 	adminResult := admin.Party("/result")
 	adminResult.Register(resultService)
-	adminResult.Handle(new(controllers.AdminResultController))
+	adminResult.Handle(new(admincon.AdminResultController))
 
 	// "/admin/user" AdminController
 	adminUser := admin.Party("/user")
 	adminUser.Register(userService)
-	adminUser.Handle(new(controllers.AdminUserController))
+	adminUser.Handle(new(admincon.AdminUserController))
 
 	// "/admin/user" AdminController
 	adminBlackip := admin.Party("/blackip")
 	adminBlackip.Register(blackipService)
-	adminBlackip.Handle(new(controllers.AdminBlackipController))
+	adminBlackip.Handle(new(admincon.AdminBlackipController))
 
 	// 传统设置路由
 	//b.Get("/follower/{id:long}", GetFollowerHandler)

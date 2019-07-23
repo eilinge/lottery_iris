@@ -1,10 +1,10 @@
 package models
 
-// 站点中与浏览器交互的用户模型
+// ObjLoginuser 站点中与浏览器交互的用户模型
 type ObjLoginuser struct {
-	Uid      int
-	Username string
-	Now      int
-	Ip       string
-	Sign     string
+	Uid      int	`json:"uid"`
+	Username string	`json:"username"`
+	Now      int	`json:"now"`
+	Ip       string	`json:"ip"`
+	Sign     string	`json:"sign"`
 }

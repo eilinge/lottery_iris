@@ -45,7 +45,7 @@ func (c *IndexController) GetLucky() map[string]interface{} {
 		return rs
 	}
 	ok = c.checkUserday(loginuser.Uid)
-	if !ok{
+	if !ok {
 		rs["code"] = 103
 		rs["msg"] = "今日的抽奖次数已用完, 明天再来吧"
 		return rs
@@ -60,9 +60,9 @@ func (c *IndexController) GetLucky() map[string]interface{} {
 	}
 	// 5. 验证IP黑名单
 	/* 黑名单不能获取实物奖
-		安全机制, 避免同一个ip大量用户的刷奖
-		公平机制, 中过大奖的用户在一段时间内把机会让出来
-		验证方法, 数据存在并且在黑名单限制单位时间内
+	安全机制, 避免同一个ip大量用户的刷奖
+	公平机制, 中过大奖的用户在一段时间内把机会让出来
+	验证方法, 数据存在并且在黑名单限制单位时间内
 	*/
 	limitBlack := false
 	if ipDayNum > conf.IpPrizeMax {
@@ -88,13 +88,15 @@ func (c *IndexController) GetLucky() map[string]interface{} {
 	}
 	// 7. 获取抽奖编码
 	prizeCode := comm.Random(10000)
+	log.Println("your prizecode is: ", prizeCode)
 	// 8. 匹配奖品是否中奖
 	prizeGift := c.prize(prizeCode, limitBlack)
+	log.Println("your prizeGift is: ", prizeGift)
 	if prizeGift == nil ||
 		prizeGift.PrizeNum < 0 || (prizeGift.PrizeNum > 0 && prizeGift.LeftNum < 0) {
-			rs["code"] = 205
-			rs["msg"] = "很遗憾, 没有中奖, 请下次再试"
-			return rs
+		rs["code"] = 205
+		rs["msg"] = "很遗憾, 没有中奖, 请下次再试"
+		return rs
 	}
 	// 9. 有限制奖品发放
 	if prizeGift.PrizeNum > 0 {
@@ -117,16 +119,16 @@ func (c *IndexController) GetLucky() map[string]interface{} {
 	}
 	// 11. 记录中奖纪录
 	result := models.LtResult{
-		GiftId: prizeGift.Id,
-		GiftName: prizeGift.Title,
-		GiftType: prizeGift.Gtype,
-		Uid: loginuser.Uid,
-		Username: loginuser.Username,
-		PrizeCode: prizeCode,
-		GiftData: prizeGift.Gdata,
+		GiftId:     prizeGift.Id,
+		GiftName:   prizeGift.Title,
+		GiftType:   prizeGift.Gtype,
+		Uid:        loginuser.Uid,
+		Username:   loginuser.Username,
+		PrizeCode:  prizeCode,
+		GiftData:   prizeGift.Gdata,
 		SysCreated: comm.NowUnix(),
-		SysIp: ip,
-		SysStatus: 0,
+		SysIp:      ip,
+		SysStatus:  0,
 	}
 	err := c.ServiceResult.Create(&result)
 	if err != nil {

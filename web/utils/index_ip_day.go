@@ -42,16 +42,3 @@ func IncrIPLuckNum(strIP string) int64 {
 	}
 	return rs.(int64)
 }
-
-// IncrUserLuckNum 放入缓存中, 进行累加
-func IncrUserLuckNum(uid int) int64 {
-	i := uid % ipFrameSize
-	key := fmt.Sprintf("day_uid_%d", i)
-	cacheObj := datasource.InstanceCache()
-	rs, err := cacheObj.Do("HINCRBY", key, uid, 1)
-	if err != nil {
-		log.Println("uid_day_lucky redis HINCRBY error=", err)
-		return math.MaxInt32
-	}
-	return rs.(int64)
-}

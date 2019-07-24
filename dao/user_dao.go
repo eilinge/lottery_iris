@@ -6,27 +6,31 @@ import (
 	"lottery/models"
 )
 
+// UserDao user database
 type UserDao struct {
 	engine *xorm.Engine
 }
 
+// NewUserDao entrance database user
 func NewUserDao(engine *xorm.Engine) *UserDao {
 	return &UserDao{
 		engine: engine,
 	}
 }
 
+// Get Get by id
 func (d *UserDao) Get(id int) *models.LtUser {
 	data := &models.LtUser{Id: id}
 	ok, err := d.engine.Get(data)
 	if ok && err == nil {
 		return data
-	} else {
-		data.Id = 0
-		return data
 	}
+	data.Id = 0
+	return data
+
 }
 
+// GetAll Get some page datas
 func (d *UserDao) GetAll(page, size int) []models.LtUser {
 	offset := (page - 1) * size
 	datalist := make([]models.LtUser, 0)
@@ -36,19 +40,18 @@ func (d *UserDao) GetAll(page, size int) []models.LtUser {
 		Find(&datalist)
 	if err != nil {
 		return datalist
-	} else {
-		return datalist
 	}
+	return datalist
 }
 
+// CountAll count all
 func (d *UserDao) CountAll() int {
 	num, err := d.engine.
 		Count(&models.LtUser{})
 	if err != nil {
 		return 0
-	} else {
-		return int(num)
 	}
+	return int(num)
 }
 
 //func (d *UserDao) Search(country string) []models.LtUser {
@@ -70,11 +73,13 @@ func (d *UserDao) CountAll() int {
 //	return err
 //}
 
+// Update ...
 func (d *UserDao) Update(data *models.LtUser, columns []string) error {
 	_, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
 	return err
 }
 
+// Create ...
 func (d *UserDao) Create(data *models.LtUser) error {
 	_, err := d.engine.Insert(data)
 	return err

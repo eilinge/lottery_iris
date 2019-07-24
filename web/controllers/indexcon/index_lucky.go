@@ -44,7 +44,8 @@ func (c *IndexController) GetLucky() map[string]interface{} {
 		rs["msg"] = "今日的抽奖次数已用完, 明天再来吧"
 		return rs
 	}
-	ok = c.checkUserday(loginuser.Uid)
+	// 当每天晚上userDayNum会进行清0, 然而数据库中的数据没清空, 需要以数据库数据为准
+	ok = c.checkUserday(loginuser.Uid, userDayNum)
 	if !ok {
 		rs["code"] = 103
 		rs["msg"] = "今日的抽奖次数已用完, 明天再来吧"

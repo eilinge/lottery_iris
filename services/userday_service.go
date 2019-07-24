@@ -73,7 +73,6 @@ func (s *userdayService) GetUserToday(uid int) *models.LtUserday {
 	list := s.dao.Search(uid, day)
 	if list != nil && len(list) > 0 {
 		return &list[0]
-	} else {
-		return nil
 	}
+	return nil
 }

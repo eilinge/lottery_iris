@@ -8,16 +8,23 @@ import (
 
 	"lottery/models"
 	"lottery/conf"
+	"lottery/web/utils"
 )
 
-func (c *IndexController) checkUserday(uid int) bool {
+func (c *IndexController) checkUserday(uid int, num int64) bool {
 	userdayInfo := c.ServiceUserday.GetUserToday(uid)
 	if userdayInfo != nil && userdayInfo.Uid == uid {
 		// 今天存在抽奖记录
 		if userdayInfo.Num >= conf.UserPrizeMax {
+			if int(num) < userdayInfo.Num {
+				utils.InitUserLuckNum(uid, int64(userdayInfo.Num))
+			}
 			return false
 		}
 		userdayInfo.Num++
+		if int(num) < userdayInfo.Num {
+				utils.InitUserLuckNum(uid, int64(userdayInfo.Num))
+			}
 		err := c.ServiceUserday.Update(userdayInfo, nil)
 		if err != nil {
 			log.Println("failed to ServiceUserday.Update err: ", err)
@@ -37,6 +44,7 @@ func (c *IndexController) checkUserday(uid int) bool {
 		if err != nil {
 			log.Println("failed to ServiceUserday.Update err: ", err)
 		}
+		utils.InitUserLuckNum(uid, 1)
 	}
 	return true
 }

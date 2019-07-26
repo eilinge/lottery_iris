@@ -1,10 +1,12 @@
 package bootstrap
 
 import (
-	"lottery/conf"
 	"strconv"
 	"time"
 	"io/ioutil"
+
+	"lottery/conf"
+	"lottery/cron"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/middleware/logger"
@@ -93,7 +95,7 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 }
 
 func (b *Bootstrapper) setupCron() {
-	// TODO:
+	cron.ConfigueAppOneCron()
 }
 
 const (

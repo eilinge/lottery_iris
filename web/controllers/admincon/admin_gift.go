@@ -13,6 +13,7 @@ import (
 	"lottery/comm"
 	"lottery/models"
 	"lottery/web/viewmodels"
+	"lottery/web/utils"
 	
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
@@ -48,6 +49,8 @@ func (c *AdminGiftController) Get() mvc.Result {
 				dataList[i].PrizeData = "[]"
 			}
 		}
+		num := utils.GetGiftPoolNum(giftInfo.Id)
+		dataList[i].Title = fmt.Sprintf("[%d] %s", num, dataList[i].Title)
 	}
 
 	return mvc.View{
@@ -135,10 +138,12 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 				if giftInfo.LeftNum < 0 || giftInfo.PrizeNum <= 0 {
 					giftInfo.LeftNum = 0
 				}
-				// TODO:
+				// 奖品总数发生了变化
+				utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
 			}
 			if datainfo.PrizeTime != giftInfo.PrizeTime {
-				// TODO:
+				// 发奖周期发生了变化
+				utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
 			}
 			giftInfo.SysUpdated = int(time.Now().Unix())
 			c.ServiceGift.Update(&giftInfo, []string{""})
@@ -153,6 +158,8 @@ func (c *AdminGiftController) PostSave() mvc.Result {
 		giftInfo.SysIp = comm.ClientIP(c.Ctx.Request())
 		giftInfo.SysCreated = int(time.Now().Unix())
 		c.ServiceGift.Create(&giftInfo)
+		// 新的奖品, 更新奖品的发奖计划
+		utils.ResetGiftPrizeData(&giftInfo, c.ServiceGift)
 	}
 	return mvc.Response{
 		Path: "/admin/gift",

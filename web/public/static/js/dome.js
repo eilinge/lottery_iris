@@ -29,7 +29,7 @@ function LuckyDo(wheel, type) {
                 alert(data.msg);
             } else {
                 wheel.wheelOfFortune('rotate', 4, type);
-                wheel["LuckyMsg"] = "【4】" + data.msg;
+                wheel["LuckyMsg"] = "[4]" + data.msg;
             }
         },
         async:true
@@ -37,7 +37,7 @@ function LuckyDo(wheel, type) {
 }
 
 function LuckyShow(wheel) {
-    alert(wheel["LuckyMsg"])
+    alert(wheel["LuckyMsg"]);
 }
 
 DomeWebController = {
@@ -77,6 +77,8 @@ DomeWebController = {
             //'wSide': 400,//转轮边长(默认使用图片宽度)
             //'pSide': 191,//指针边长(默认使用图片宽度)
             //'bSide': 87,//按钮边长(默认使用图片宽度)
+            // 41 - 400
+            // 1-- 一等奖: [200, 310] -- 转盘区间
             'items': {1: [220, 310], 2: [311, 400], 3: [41, 128], 4: [129, 219]},//奖品角度配置{键:[开始角度,结束角度],键:[开始角度,结束角度],......}
             'pAngle': 270,//指针图片中的指针角度(x轴正值为0度，顺时针旋转 默认0)
             //'type': 'w',//旋转指针还是转盘('p'指针 'w'转盘 默认'p')
@@ -84,12 +86,12 @@ DomeWebController = {
             //'rotateNum': 12,//转多少圈(默认12)
             //'duration': 6666,//转一次的持续时间(默认5000)
             'click': function () {
-                LuckyDo(that.getEle("$wheelContainer"), 'w')
+                LuckyDo(that.getEle("$wheelContainer"), 'w');
                 // var key = parseInt(Math.random() * 4) + 1;
                 // that.getEle("$wheelContainer").wheelOfFortune('rotate', key,'w');
             },//点击按钮的回调
             'rotateCallback': function (key) {
-                LuckyShow(that.getEle("$wheelContainer"))
+                LuckyShow(that.getEle("$wheelContainer"));
                 // alert("左:" + key);
             }//转完的回调
         });
@@ -108,12 +110,12 @@ DomeWebController = {
             //'rotateNum': 12,//转多少圈(默认12)
             //'duration': 6666,//转一次的持续时间(默认5000)
             'click': function () {
-                LuckyDo(that.getEle("$wheelContainer2", 'p'))
+                LuckyDo(that.getEle("$wheelContainer2", 'p'));
                 // var key = parseInt(Math.random() * 4) + 1;
                 // that.getEle("$wheelContainer2").wheelOfFortune('rotate', key, 'p');
             },//点击按钮的回调
             'rotateCallback': function (key) {
-                LuckyShow(that.getEle("$wheelContainer2"))
+                LuckyShow(that.getEle("$wheelContainer2"));
                 // alert("右:" + key);
             }//转完的回调
         });

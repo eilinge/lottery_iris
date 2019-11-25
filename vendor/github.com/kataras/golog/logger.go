@@ -185,7 +185,7 @@ func (l *Logger) DisableNewLine() *Logger {
 // Returns itself.
 func (l *Logger) SetLevel(levelName string) *Logger {
 	l.mu.Lock()
-	l.Level = fromLevelName(levelName)
+	l.Level = ParseLevel(levelName)
 	l.mu.Unlock()
 
 	return l
@@ -418,6 +418,7 @@ func (l *Logger) Clone() *Logger {
 		Prefix:     l.Prefix,
 		Level:      l.Level,
 		TimeFormat: l.TimeFormat,
+		NewLine:    l.NewLine,
 		Printer:    l.Printer,
 		handlers:   l.handlers,
 		children:   newLoggerMap(),

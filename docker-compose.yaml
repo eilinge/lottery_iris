@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: eilinge
+    volumes:
+      - mysql_data:/var/lib/mysql/data
+    ports:
+      - 3306:3306 #外:内
+
+  redis:
+    image: redis:4
+    restart: always
+    ports:
+      # 端口映射
+      - 6379:6379
+    volumes:
+      # 目录映射
+      - "${REDIS_DIR}/conf:/usr/local/etc/redis"
+      - "${REDIS_DIR}/data:/data"
+
+  api_service:
+    api:
+    image:
+    restart: always
+    environment:
+      MYSQL_DSN: "root:eilinge@tcp(172.19.37.39:3306)/lottery?charset=utf-8"
+      REDIS_ADDR: "172.19.37.39:6379"
+      REDIS_DB: "0"
+      SESSION_SECRE: "3Ztqcc74gu27eUz"
+    ports:
+      - 8080:8080 #外:内
+    depends_on:
+      db
+      redis

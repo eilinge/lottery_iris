@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: eilinge
+    volumes:
+      - mysql_data:/var/lib/mysql/data
+    ports:
+      - 3306:3306 #外:内

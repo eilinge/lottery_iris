@@ -5,23 +5,22 @@ services:
   mysql:
     image: mysql:5.7
     restart: always
+    command:
+        --explicit_defaults_for_timestamp --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - ${MYSQL_DIR}:/var/lib/mysql/data
+      - ${MYSQL_DIR}:/var/lib/mysql
     ports:
       - 3306:3306 #外:内
 
   redis:
     image: redis:4
     restart: always
-    ports:
-      # 端口映射
-      - 6379:6379
     volumes:
-      # 目录映射
-      # - "${REDIS_DIR}/conf:/usr/local/etc/redis"
       - "${REDIS_DIR}/data:/data"
+    ports:
+      - 6379:6379 #外:内
 
   api_service:
     image: registry.cn-shanghai.aliyuncs.com/eilingeloveduzi/eilinge:latest

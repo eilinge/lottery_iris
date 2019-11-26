@@ -9,6 +9,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - ${MYSQL_DIR}:/var/lib/mysql
+      - ${MYSQL_DIR}:/var/lib/data
+      - ${MYSQL_DIR}/db_lottery.sql:/etc/mysql/db_lottery.sql
     ports:
       - 3306:3306 #外:内

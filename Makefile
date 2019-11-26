@@ -1,7 +1,7 @@
 
 .PHONE: test, sonar, build, clean, run
 
-app := cmpp_service
+app := api_service
 
 commit := $(shell git rev-parse HEAD)
 commit_flag := -X main.Commit=$(commit)
@@ -19,7 +19,7 @@ sonar:
 
 build: export CGO_ENABLED=0
 build:
-	go build -mod=vendor -v -ldflags '$(commit_flag) $(build_flag)' -o out/$(app)
+	cd web && go build -mod=vendor -v -ldflags '$(commit_flag) $(build_flag)' -o ../out/$(app)
 
 deploy_test: export GOOS=linux
 deploy_test: build

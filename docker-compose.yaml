@@ -6,9 +6,9 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: eilinge
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql/data
+      - ${MYSQL_DIR}:/var/lib/mysql/data
     ports:
       - 3306:3306 #外:内
 
@@ -20,11 +20,11 @@ services:
       - 6379:6379
     volumes:
       # 目录映射
-      - "${REDIS_DIR}/conf:/usr/local/etc/redis"
+      # - "${REDIS_DIR}/conf:/usr/local/etc/redis"
       - "${REDIS_DIR}/data:/data"
 
   api_service:
-    image:
+    image: registry.cn-shanghai.aliyuncs.com/eilingeloveduzi/eilinge:latest
     restart: always
     environment:
       MYSQL_DSN: "root:eilinge@tcp(172.19.37.39:3306)/lottery?charset=utf-8"
@@ -34,5 +34,5 @@ services:
     ports:
       - 8080:8080 #外:内
     depends_on:
-      mysql
-      redis
+      - mysql
+      - redis

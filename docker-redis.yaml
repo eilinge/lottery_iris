@@ -5,6 +5,6 @@ services:
     image: redis
     restart: always
     volumes:
-      - redis_data:/data
+      - "${REDIS_DIR}/data:/data"
     ports:
       - 6379:6379 #外:内

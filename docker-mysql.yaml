@@ -5,8 +5,8 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: eilinge
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql/data
+      - ${MYSQL_DIR}:/var/lib/mysql/data
     ports:
       - 3306:3306 #外:内

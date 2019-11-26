@@ -24,7 +24,6 @@ services:
       - "${REDIS_DIR}/data:/data"
 
   api_service:
-    api:
     image:
     restart: always
     environment:
@@ -35,5 +34,5 @@ services:
     ports:
       - 8080:8080 #外:内
     depends_on:
-      db
+      mysql
       redis

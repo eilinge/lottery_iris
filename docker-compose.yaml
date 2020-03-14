@@ -32,7 +32,7 @@ services:
       REDIS_DB: "0"
       SESSION_SECRE: "3Ztqcc74gu27eUz"
     ports:
-      - 8080:8080 #外:内
+      - 8000:8000 #外:内
     depends_on:
       - mysql
       - redis

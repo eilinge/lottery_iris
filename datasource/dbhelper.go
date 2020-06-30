@@ -8,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"imooc.com/lottery/conf"
+	"imooc.com/lottery/config"
 )
 
 var dbLock sync.Mutex
@@ -29,12 +30,13 @@ func InstanceDbMaster() *xorm.Engine {
 }
 
 func NewDbMaster() *xorm.Engine {
-	sourcename := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8",
-		conf.DbMaster.User,
-		conf.DbMaster.Pwd,
-		conf.DbMaster.Host,
-		conf.DbMaster.Port,
-		conf.DbMaster.Database)
+	cfg := config.GetInstance().LoadConf()
+	sourcename := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8",
+		cfg.Mysql.User,
+		cfg.Mysql.Password,
+		cfg.Mysql.Host,
+		cfg.Mysql.Port,
+		cfg.Mysql.Database)
 
 	instance, err := xorm.NewEngine(conf.DriverName, sourcename)
 	if err != nil {

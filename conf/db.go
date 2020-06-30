@@ -13,17 +13,3 @@ type DbConfig struct {
 	Database  string
 	IsRunning bool // 是否正常运行
 }
-
-// 系统中所有mysql主库 root:root@tcp(127.0.0.1:3306)/lottery?charset=utf-8
-var DbMasterList = []DbConfig{
-	{
-		Host:      "47.101.187.227",
-		Port:      3306,
-		User:      "root",
-		Pwd:       "eilinge",
-		Database:  "lottery",
-		IsRunning: true,
-	},
-}
-
-var DbMaster DbConfig = DbMasterList[0]

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
-	"imooc.com/lottery/conf"
+	"imooc.com/lottery/config"
 )
 
 var rdsLock sync.Mutex
@@ -15,7 +15,7 @@ var cacheInstance *RedisConn
 
 // 封装成一个redis资源池
 type RedisConn struct {
-	pool *redis.Pool
+	pool      *redis.Pool
 	showDebug bool
 }
 
@@ -60,16 +60,17 @@ func InstanceCache() *RedisConn {
 
 // 重新实例化
 func NewCache() *RedisConn {
+	cfg := config.GetInstance().LoadConf()
 	pool := redis.Pool{
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", fmt.Sprintf("%s:%d", conf.RdsCache.Host, conf.RdsCache.Port))
+			c, err := redis.Dial("tcp", fmt.Sprintf("%s:%s", cfg.Redis.Host, cfg.Redis.Port))
 			if err != nil {
 				log.Fatal("rdshelper.NewCache Dial error ", err)
 				return nil, err
 			}
 			return c, nil
 		},
-		TestOnBorrow:    func(c redis.Conn, t time.Time) error {
+		TestOnBorrow: func(c redis.Conn, t time.Time) error {
 			if time.Since(t) < time.Minute {
 				return nil
 			}
@@ -83,7 +84,7 @@ func NewCache() *RedisConn {
 		MaxConnLifetime: 0,
 	}
 	instance := &RedisConn{
-		pool:&pool,
+		pool: &pool,
 	}
 	cacheInstance = instance
 	cacheInstance.ShowDebug(true)

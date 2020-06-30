@@ -6,6 +6,11 @@ github.com/BurntSushi/toml
 github.com/Joker/jade
 # github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398
 github.com/Shopify/goreferrer
+# github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
+github.com/alecthomas/template
+github.com/alecthomas/template/parse
+# github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf
+github.com/alecthomas/units
 # github.com/aymerick/raymond v2.0.2+incompatible
 github.com/aymerick/raymond
 github.com/aymerick/raymond/ast
@@ -14,6 +19,8 @@ github.com/aymerick/raymond/parser
 # github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385
 github.com/eknkc/amber
 github.com/eknkc/amber/parser
+# github.com/fatih/camelcase v1.0.0
+github.com/fatih/camelcase
 # github.com/fatih/structs v1.1.0
 github.com/fatih/structs
 # github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
@@ -77,28 +84,42 @@ github.com/kataras/pio/terminal
 # github.com/klauspost/compress v1.9.2
 github.com/klauspost/compress/flate
 github.com/klauspost/compress/gzip
+# github.com/koding/multiconfig v0.0.0-20171124222453-69c27309b2d7
+github.com/koding/multiconfig
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
 # github.com/microcosm-cc/bluemonday v1.0.2
 github.com/microcosm-cc/bluemonday
 # github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421
 github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742
 github.com/modern-go/reflect2
+# github.com/prometheus/common v0.2.0
+github.com/prometheus/common/log
 # github.com/ryanuber/columnize v2.1.0+incompatible
 github.com/ryanuber/columnize
 # github.com/shurcooL/sanitized_anchor_name v1.0.0
 github.com/shurcooL/sanitized_anchor_name
+# github.com/sirupsen/logrus v1.2.0
+github.com/sirupsen/logrus
 # golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 golang.org/x/crypto/acme
 golang.org/x/crypto/acme/autocert
+golang.org/x/crypto/ssh/terminal
 # golang.org/x/net v0.0.0-20190311183353-d8887717615a
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/publicsuffix
-# golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a
+# golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae
 golang.org/x/sys/unix
+golang.org/x/sys/windows
+golang.org/x/sys/windows/registry
+golang.org/x/sys/windows/svc/eventlog
 # google.golang.org/appengine v1.6.0
 google.golang.org/appengine/cloudsql
-# gopkg.in/yaml.v2 v2.2.2
+# gopkg.in/alecthomas/kingpin.v2 v2.2.6
+gopkg.in/alecthomas/kingpin.v2
+# gopkg.in/yaml.v2 v2.2.4
 gopkg.in/yaml.v2
 # xorm.io/builder v0.3.6
 xorm.io/builder

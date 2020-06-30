@@ -27,12 +27,12 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/eilingeloveduzi/eilinge:latest
     restart: always
     environment:
-      MYSQL_DSN: "root:eilinge@tcp(172.19.37.39:3306)/lottery?charset=utf-8"
-      REDIS_ADDR: "172.19.37.39:6379"
+      MYSQL_DSN: "root:eilinge@tcp(127.0.0.1:3306)/lottery?charset=utf-8"
+      REDIS_ADDR: "127.0.0.1:6379"
       REDIS_DB: "0"
       SESSION_SECRE: "3Ztqcc74gu27eUz"
     ports:
-      - 8080:8080 #外:内
+      - 8000:8000 #外:内
     depends_on:
       - mysql
       - redis

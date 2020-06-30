@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # git.apache.org/thrift.git v0.13.0
 git.apache.org/thrift.git/lib/go/thrift
 # github.com/BurntSushi/toml v0.3.1
@@ -125,3 +126,111 @@ gopkg.in/yaml.v2
 xorm.io/builder
 # xorm.io/core v0.7.2-0.20190928055935-90aeac8d08eb
 xorm.io/core
+=======
+# git.apache.org/thrift.git v0.13.0
+git.apache.org/thrift.git/lib/go/thrift
+# github.com/BurntSushi/toml v0.3.1
+github.com/BurntSushi/toml
+# github.com/Joker/jade v1.0.0
+github.com/Joker/jade
+# github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398
+github.com/Shopify/goreferrer
+# github.com/aymerick/raymond v2.0.2+incompatible
+github.com/aymerick/raymond
+github.com/aymerick/raymond/ast
+github.com/aymerick/raymond/lexer
+github.com/aymerick/raymond/parser
+# github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385
+github.com/eknkc/amber
+github.com/eknkc/amber/parser
+# github.com/fatih/structs v1.1.0
+github.com/fatih/structs
+# github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
+github.com/flosch/pongo2
+# github.com/go-sql-driver/mysql v1.4.1
+github.com/go-sql-driver/mysql
+# github.com/go-xorm/xorm v0.7.9
+github.com/go-xorm/xorm
+# github.com/gomodule/redigo v2.0.0+incompatible
+github.com/gomodule/redigo/internal
+github.com/gomodule/redigo/redis
+# github.com/gorilla/schema v1.1.0
+github.com/gorilla/schema
+# github.com/gorilla/securecookie v1.1.1
+github.com/gorilla/securecookie
+# github.com/iris-contrib/blackfriday v2.0.0+incompatible
+github.com/iris-contrib/blackfriday
+# github.com/iris-contrib/formBinder v5.0.0+incompatible
+github.com/iris-contrib/formBinder
+# github.com/iris-contrib/go.uuid v2.0.0+incompatible
+github.com/iris-contrib/go.uuid
+# github.com/json-iterator/go v1.1.8
+github.com/json-iterator/go
+# github.com/juju/errors v0.0.0-20181118221551-089d3ea4e4d5
+github.com/juju/errors
+# github.com/kataras/golog v0.0.9
+github.com/kataras/golog
+# github.com/kataras/iris v11.1.1+incompatible
+github.com/kataras/iris
+github.com/kataras/iris/cache
+github.com/kataras/iris/cache/cfg
+github.com/kataras/iris/cache/client
+github.com/kataras/iris/cache/client/rule
+github.com/kataras/iris/cache/entry
+github.com/kataras/iris/cache/ruleset
+github.com/kataras/iris/cache/uri
+github.com/kataras/iris/context
+github.com/kataras/iris/core/errors
+github.com/kataras/iris/core/handlerconv
+github.com/kataras/iris/core/host
+github.com/kataras/iris/core/memstore
+github.com/kataras/iris/core/netutil
+github.com/kataras/iris/core/router
+github.com/kataras/iris/hero
+github.com/kataras/iris/hero/di
+github.com/kataras/iris/macro
+github.com/kataras/iris/macro/handler
+github.com/kataras/iris/macro/interpreter/ast
+github.com/kataras/iris/macro/interpreter/lexer
+github.com/kataras/iris/macro/interpreter/parser
+github.com/kataras/iris/macro/interpreter/token
+github.com/kataras/iris/middleware/basicauth
+github.com/kataras/iris/middleware/logger
+github.com/kataras/iris/middleware/recover
+github.com/kataras/iris/mvc
+github.com/kataras/iris/sessions
+github.com/kataras/iris/view
+# github.com/kataras/pio v0.0.0-20190103105442-ea782b38602d
+github.com/kataras/pio
+github.com/kataras/pio/terminal
+# github.com/klauspost/compress v1.9.2
+github.com/klauspost/compress/flate
+github.com/klauspost/compress/gzip
+# github.com/microcosm-cc/bluemonday v1.0.2
+github.com/microcosm-cc/bluemonday
+# github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421
+github.com/modern-go/concurrent
+# github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742
+github.com/modern-go/reflect2
+# github.com/ryanuber/columnize v2.1.0+incompatible
+github.com/ryanuber/columnize
+# github.com/shurcooL/sanitized_anchor_name v1.0.0
+github.com/shurcooL/sanitized_anchor_name
+# golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+# golang.org/x/net v0.0.0-20190311183353-d8887717615a
+golang.org/x/net/html
+golang.org/x/net/html/atom
+golang.org/x/net/publicsuffix
+# golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a
+golang.org/x/sys/unix
+# google.golang.org/appengine v1.6.0
+google.golang.org/appengine/cloudsql
+# gopkg.in/yaml.v2 v2.2.2
+gopkg.in/yaml.v2
+# xorm.io/builder v0.3.6
+xorm.io/builder
+# xorm.io/core v0.7.2-0.20190928055935-90aeac8d08eb
+xorm.io/core
+>>>>>>> e6b07d62e35679583a831f3a948252a683f9fd31

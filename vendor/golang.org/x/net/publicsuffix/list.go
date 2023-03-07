@@ -33,9 +33,10 @@
 // the last two are not (but share the same eTLD+1: "google.com").
 //
 // All of these domains have the same eTLD+1:
-//  - "www.books.amazon.co.uk"
-//  - "books.amazon.co.uk"
-//  - "amazon.co.uk"
+//   - "www.books.amazon.co.uk"
+//   - "books.amazon.co.uk"
+//   - "amazon.co.uk"
+//
 // Specifically, the eTLD+1 is "amazon.co.uk", because the eTLD is "co.uk".
 //
 // There is no closed form algorithm to calculate the eTLD of a domain.
@@ -165,6 +166,10 @@ func nodeLabel(i uint32) string {
 // EffectiveTLDPlusOne returns the effective top level domain plus one more
 // label. For example, the eTLD+1 for "foo.bar.golang.org" is "golang.org".
 func EffectiveTLDPlusOne(domain string) (string, error) {
+	if strings.HasPrefix(domain, ".") || strings.HasSuffix(domain, ".") || strings.Contains(domain, "..") {
+		return "", fmt.Errorf("publicsuffix: empty label in domain %q", domain)
+	}
+
 	suffix, _ := PublicSuffix(domain)
 	if len(domain) <= len(suffix) {
 		return "", fmt.Errorf("publicsuffix: cannot derive eTLD+1 for domain %q", domain)

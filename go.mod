@@ -31,7 +31,7 @@ require (
 	github.com/klauspost/compress v1.9.2 // indirect
 	github.com/koding/multiconfig v0.0.0-20171124222453-69c27309b2d7
 	github.com/mattn/go-colorable v0.1.7 // indirect
-	github.com/microcosm-cc/bluemonday v1.0.2 // indirect
+	github.com/microcosm-cc/bluemonday v1.0.20 // indirect
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/prometheus/common v0.2.0
 	github.com/ryanuber/columnize v2.1.0+incompatible // indirect

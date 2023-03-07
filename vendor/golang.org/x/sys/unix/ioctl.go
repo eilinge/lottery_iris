@@ -1,8 +1,8 @@
-<<<<<<< HEAD
 // Copyright 2018 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build aix || darwin || dragonfly || freebsd || linux || netbsd || openbsd || solaris
 // +build aix darwin dragonfly freebsd linux netbsd openbsd solaris
 
 package unix
@@ -19,6 +19,15 @@ import (
 // on fd, using the specified request number.
 func IoctlSetInt(fd int, req uint, value int) error {
 	return ioctl(fd, req, uintptr(value))
+}
+
+// IoctlSetPointerInt performs an ioctl operation which sets an
+// integer value on fd, using the specified request number. The ioctl
+// argument is called with a pointer to the integer value, rather than
+// passing the integer value directly.
+func IoctlSetPointerInt(fd int, req uint, value int) error {
+	v := int32(value)
+	return ioctl(fd, req, uintptr(unsafe.Pointer(&v)))
 }
 
 // IoctlSetWinsize performs an ioctl on fd with a *Winsize argument.
@@ -64,35 +73,3 @@ func IoctlGetTermios(fd int, req uint) (*Termios, error) {
 	err := ioctl(fd, req, uintptr(unsafe.Pointer(&value)))
 	return &value, err
 }
-=======
-// Copyright 2018 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-// +build aix darwin dragonfly freebsd linux netbsd openbsd solaris
-
-package unix
-
-import "runtime"
-
-// IoctlSetWinsize performs an ioctl on fd with a *Winsize argument.
-//
-// To change fd's window size, the req argument should be TIOCSWINSZ.
-func IoctlSetWinsize(fd int, req uint, value *Winsize) error {
-	// TODO: if we get the chance, remove the req parameter and
-	// hardcode TIOCSWINSZ.
-	err := ioctlSetWinsize(fd, req, value)
-	runtime.KeepAlive(value)
-	return err
-}
-
-// IoctlSetTermios performs an ioctl on fd with a *Termios.
-//
-// The req value will usually be TCSETA or TIOCSETA.
-func IoctlSetTermios(fd int, req uint, value *Termios) error {
-	// TODO: if we get the chance, remove the req parameter.
-	err := ioctlSetTermios(fd, req, value)
-	runtime.KeepAlive(value)
-	return err
-}
->>>>>>> e6b07d62e35679583a831f3a948252a683f9fd31
